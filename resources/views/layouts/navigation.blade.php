@@ -14,7 +14,12 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(Auth::user()->role == 'admin')
+                    @if(auth()->user()->hasRole('admin'))
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    @endif
+                    @if(auth()->user()->hasRole('centreappuiGestion'))
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                         {{ __('List des Utilisateurs') }}
                     </x-nav-link>
@@ -23,7 +28,9 @@
                     </x-nav-link>
 
                     @endif
-                    @if(Auth::user()->role == 'entreprise')
+
+                    @if(auth()->user()->hasRole('entreprise'))
+
                     <x-nav-link :href="route('entreprise.index')" :active="request()->routeIs('entreprise.index')">
                         {{ __('Account') }}
                     </x-nav-link>
@@ -31,29 +38,23 @@
                         {{ __('List des Formations') }}
                     </x-nav-link>
                     @endif
-                    @if(Auth::user()->role == 'centreanalyse')
 
-                    <x-nav-link :href="route('listformulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
+                    @if(auth()->user()->hasRole('centreanalyse|admin'))
+                    <x-nav-link :href="route('listformulaireformation.index')" :active="request()->routeIs('listformulaireformation.index')">
                         {{ __('List des Formations') }}
                     </x-nav-link>
                     <x-nav-link :href="route('listformulaireanalyse.index')" :active="request()->routeIs('listformulaireanalyse.index')">
                         {{ __('List des Analyses') }}
                     </x-nav-link>
                     @endif
-                    @if(Auth::user()->role == 'directeur')
+                    @if(auth()->user()->hasRole('directeur|enseignant'))
 
-                    <x-nav-link :href="route('listformulaireanalysebylabo.index')" :active="request()->routeIs('listformulaireanalyse.index')">
+                    <x-nav-link :href="route('listformulaireanalyse.index')" :active="request()->routeIs('listformulaireanalyse.index')">
                         {{ __('List des Analyses') }}
                     </x-nav-link>
                     @endif
-                    @if(Auth::user()->role == 'enseignant')
 
-                    <x-nav-link :href="route('listformulaireanalysebylabo.index')" :active="request()->routeIs('listformulaireanalyse.index')">
-                        {{ __('List des Analyses') }}
-                    </x-nav-link>
-                    @endif
-                    @if(Auth::user()->role == 'student')
-
+                    @if(auth()->user()->hasRole('student'))
                     <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
                         {{ __('List des Analyses') }}
                     </x-nav-link>

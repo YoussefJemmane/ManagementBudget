@@ -5,96 +5,119 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 flex justify-center ">
-        <div class="border rounded-md bg-white p-[20px]  w-[400px]">
-            <form method="POST" action="{{ route('student.store') }}">
+    <div class="flex justify-center py-12 ">
+        <div class="border  bg-white p-[20px] rounded-md w-[400px]">
+            <form method="POST" action="{{ route('student.store') }}" class="max-w-md pt-4 mx-auto">
                 @csrf
-
-                <!-- Name -->
-                <div>
-                    <x-input-label for="name" :value="__('Name')" />
-                    <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <!-- Name -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="text" name="name" id="name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
+                        @error('name')
+                        <span class="text-xs italic text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <!-- Email Address -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="email" name="email" id="email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
+                        @error('email')
+                        <span class="text-xs italic text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <!-- Phone -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="text" name="phone" id="phone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="phone" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone</label>
+                        @error('phone')
+                        <span class="text-xs italic text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <!-- CIN -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="cin" name="cin" id="cin" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="cin" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CIN</label>
+                        @error('cin')
+                        <span class="text-xs italic text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
-                <!-- Email Address -->
-                <div class="mt-4">
-                    <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                </div>
-                <!-- Phone -->
-                <div class="mt-4">
-                    <x-input-label for="phone" :value="__('Phone')" />
-                    <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autocomplete="phone" />
-                    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-                </div>
 
-
-                <!-- CIN -->
-                <div class="mt-4" id="cin">
-                    <x-input-label for="cin" :value="__('CIN')" />
-                    <x-text-input type="text" name="cin" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                    <x-input-error :messages="$errors->get('cin')" class="mt-2" />
-                </div>
                 <!-- CNE -->
-                <div class="mt-4" id="cne">
-                    <x-input-label for="cne" :value="__('CNE')" />
-                    <x-text-input type="text" name="cne" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                    <x-input-error :messages="$errors->get('cne')" class="mt-2" />
+
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="cne" id="cne" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                    <label for="cne" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CNE</label>
+                    @error('cne')
+                    <span class="text-xs italic text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <!-- Date Inscription -->
-                <div class="mt-4" id="date_inscription">
-                    <x-input-label for="date_inscription" :value="__('Date Inscription')" />
-                    <x-text-input type="date" name="date_inscription" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                    <x-input-error :messages="$errors->get('date_inscription')" class="mt-2" />
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="date" name="date_inscription" id="date_inscription" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                    <label for="date_inscription" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Date Inscription</label>
+                    @error('date_inscription')
+                    <span class="text-xs italic text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <!-- Ettablisement -->
-                <div class="mt-4" id="ettablisement">
-                    <x-input-label for="ettablisement" :value="__('Ettablisement')" />
-                    <x-text-input type="text" name="ettablisement" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                    <x-input-error :messages="$errors->get('ettablisement')" class="mt-2" />
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="ettablisement" id="ettablisement" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                    <label for="ettablisement" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Ettablisement</label>
+                    @error('ettablisement')
+                    <span class="text-xs italic text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <!-- Encadrant -->
-                <div class="mt-4" id="enseignant">
-                    <x-input-label for="enseignant" :value="__('Enseignant')" />
-                    <select name="enseignant_id" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+
+                <div class="relative z-0 w-full mb-5 group">
+                    <select name="enseignant_id" id="enseignant_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                         @foreach ($enseignants as $enseignant)
                         <option value="{{ $enseignant->id }}">{{ $enseignant->user->name }}</option>
                         @endforeach
                     </select>
-                    <x-input-error :messages="$errors->get('enseignant')" class="mt-2" />
+                    <label for="enseignant_id" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Encadrant</label>
+                    @error('enseignant_id')
+                    <span class="text-xs italic text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="grid md:grid-cols-2 md:gap-6">
+
+                    <!-- Password -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="password" name="password" id="password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+                        @error('password')
+                        <span class="text-xs italic text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <!-- Confirm Password -->
+
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="password_confirmation" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm Password</label>
+                        @error('password_confirmation')
+                        <span class="text-xs italic text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+
                 </div>
 
-
-                <!-- Password -->
-                <div class="mt-4">
-                    <x-input-label for="password" :value="__('Password')" />
-
-                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="mt-4">
-                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                    <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                </div>
-
-                <div class="flex items-center justify-end mt-4">
-
-
-                    <x-link-button class="ms-4" href="{{ route('student.index') }}">
+                <div class="flex items-center justify-end gap-4 mt-4">
+                    <button onclick="window.location='{{ route('users.index') }}'" class="w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
                         {{ __('Annuler') }}
-                    </x-link-button>
-                    <x-primary-button class="ms-4">
+                    </button>
+
+                    <button type="submit" class="w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         {{ __('Submit') }}
-                    </x-primary-button>
+                    </button>
                 </div>
+
             </form>
 
         </div>

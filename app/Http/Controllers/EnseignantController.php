@@ -37,17 +37,18 @@ class EnseignantController extends Controller
         $enseignant = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role' => 'enseignant',
+
             'password' => $request->password,
             'cin' => $request->cin,
             'phone' => $request->phone,
         ]);
+        $enseignant->assignRole('enseignant');
         $enseignant->enseignants()->create([
             'ettablisement' => $request->ettablisement,
             'laboratory_id' => $request->laboratory_id,
         ]);
 
-        return redirect()->route('enseignant.index');
+        return redirect()->route('users.index');
     }
 
     /**
@@ -80,6 +81,6 @@ class EnseignantController extends Controller
     public function destroy(Enseignant $enseignant)
     {
         $enseignant->delete();
-        return redirect()->route('enseignant.index');
+        return redirect()->route('users.index');
     }
 }

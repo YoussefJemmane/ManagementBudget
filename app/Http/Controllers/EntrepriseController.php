@@ -45,8 +45,9 @@ class EntrepriseController extends Controller
             'password' => $request->password,
             'cin' => $request->cin,
             'phone' => $request->phone,
-            'role' => 'entreprise',
+
         ]);
+        $entreprise->assignRole('entreprise');
         $entreprise->entreprises()->create([
             'entreprise' => $request->entreprise,
         ]);

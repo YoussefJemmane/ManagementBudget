@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Administrateur;
 use App\Models\CentreAnalyse;
+use App\Models\CentreAppui;
 use App\Models\Directeur;
 use App\Models\Enseignant;
 use App\Models\Entreprise;
@@ -25,10 +26,9 @@ class AdminSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin'),
-            'role' => 'admin',
             'cin' => 'EE111111',
             'phone' => '0611111111',
-        ]);
+        ])->assignRole('admin');
 
         Administrateur::create([
             'user_id' => 1,
@@ -38,10 +38,9 @@ class AdminSeeder extends Seeder
             'name' => 'Directeur',
             'email' => 'directeur@gmail.com',
             'password' => bcrypt('directeur'),
-            'role' => 'directeur',
             'cin' => 'EE111111',
             'phone' => '0611111111',
-        ]);
+        ])->assignRole('directeur');
 
         Directeur::create([
             'user_id' => 2,
@@ -57,10 +56,10 @@ class AdminSeeder extends Seeder
             'name' => 'Enseignant',
             'email' => 'enseignant@gmail.com',
             'password' => bcrypt('enseignant'),
-            'role' => 'enseignant',
+
             'cin' => 'EE111111',
             'phone' => '0611111111',
-        ]);
+        ])->assignRole('enseignant');
 
         Enseignant::create([
             'user_id' => 3,
@@ -72,10 +71,10 @@ class AdminSeeder extends Seeder
             'name' => 'student',
             'email' => 'student@gmail.com',
             'password' => bcrypt('student'),
-            'role' => 'student',
+
             'cin' => 'EE111111',
             'phone' => '0611111111',
-        ]);
+        ])->assignRole('student');
 
         Student::create([
             'user_id' => 4,
@@ -89,10 +88,10 @@ class AdminSeeder extends Seeder
             'name' => 'Entreprise',
             'email' => 'entreprise@gmail.com',
             'password' => bcrypt('entreprise'),
-            'role' => 'entreprise',
+
             'cin' => 'EE111111',
             'phone' => '0611111111',
-        ]);
+        ])->assignRole('entreprise');
 
         Entreprise::create([
             'user_id' => 5,
@@ -111,13 +110,37 @@ class AdminSeeder extends Seeder
             'name' => 'Centre d\'analyse',
             'email' => 'centreanalyse@gmail.com',
             'password' => bcrypt('centreanalyse'),
-            'role' => 'centreanalyse',
+
             'cin' => 'EE111111',
             'phone' => '0611111111',
-        ]);
+        ])->assignRole('centreanalyse');
 
         CentreAnalyse::create([
             'user_id' => 6,
+        ]);
+        User::create([
+            'name' => 'Centre d\'appui Gestion',
+            'email' => 'centreappuigestion@gmail.com',
+            'password' => bcrypt('centreappuigestion'),
+
+            'cin' => 'EE111111',
+            'phone' => '0611111111',
+        ])->assignRole('centreappuiGestion');
+
+        CentreAppui::create([
+            'user_id' => 7,
+        ]);
+        User::create([
+            'name' => 'Centre d\'appui Admin',
+            'email' => 'centreappuiadmin@gmail.com',
+            'password' => bcrypt('centreappuiadmin'),
+
+            'cin' => 'EE111111',
+            'phone' => '0611111111',
+        ])->assignRole('centreappuiAdmin');
+
+        CentreAppui::create([
+            'user_id' => 8,
         ]);
     }
 }
