@@ -44,8 +44,9 @@ class DirecteurController extends Controller
             'password' => $request->password,
             'cin' => $request->cin,
             'phone' => $request->phone,
-            'role' => 'directeur',
+
         ]);
+        $directeur->assignRole('directeur');
         $directeur->directeurs()->create();
 
         return redirect()->route('laboratory.create');

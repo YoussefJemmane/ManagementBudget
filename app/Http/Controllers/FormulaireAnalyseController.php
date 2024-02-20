@@ -199,14 +199,14 @@ class FormulaireAnalyseController extends Controller
         $formulaireanalyse->update([
             "validation_centre_analyse" => "validate",
         ]);
-        return redirect()->route('listformulaireanalyse.index');
+        return redirect()->route('formulaireanalyse.index');
     }
     public function novalidationcentreanalyse(Request $request, FormulaireAnalyse $formulaireanalyse)
     {
         $formulaireanalyse->update([
             "validation_centre_analyse" => "non validate",
         ]);
-        return redirect()->route('listformulaireanalyse.index');
+        return redirect()->route('formulaireanalyse.index');
     }
     public function validationdirecteurlabo(Request $request, FormulaireAnalyse $formulaireanalyse)
     {
@@ -218,7 +218,7 @@ class FormulaireAnalyseController extends Controller
         $laboratory->update([
             "budget" => $laboratory->budget - $formulaireanalyse->prix_total,
         ]);
-        return redirect()->route('listformulaireanalysebylabo.index');
+        return redirect()->route('formulaireanalyse.index');
     }
     public function novalidationdirecteurlabo(Request $request, FormulaireAnalyse $formulaireanalyse)
     {
@@ -226,21 +226,21 @@ class FormulaireAnalyseController extends Controller
             "validation_directeur_labo" => "non validate",
         ]);
 
-        return redirect()->route('listformulaireanalysebylabo.index');
+        return redirect()->route('formulaireanalyse.index');
     }
     public function validationenseignant(Request $request, FormulaireAnalyse $formulaireanalyse)
     {
         $formulaireanalyse->update([
             "validation_enseignant" => "validate",
         ]);
-        return redirect()->route('listformulaireanalysebylabo.index');
+        return redirect()->route('formulaireanalyse.index');
     }
     public function novalidationenseignant(Request $request, FormulaireAnalyse $formulaireanalyse)
     {
         $formulaireanalyse->update([
             "validation_enseignant" => "non validate",
         ]);
-        return redirect()->route('listformulaireanalysebylabo.index');
+        return redirect()->route('formulaireanalyse.index');
     }
     public function list()
     {
@@ -248,18 +248,5 @@ class FormulaireAnalyseController extends Controller
         $analyses = FormulaireAnalyse::all();
         return view('centreanalyses.analyses.index', compact('analyses'));
     }
-    public function listByLaboratory()
-    {
-        if (auth()->user()->role == "directeur") {
-            $directeur = Directeur::where('user_id', auth()->user()->id)->first();
-            $laboratoryId = Laboratory::where('directeur_id', $directeur->id)->first()->id;
 
-            $analyses = FormulaireAnalyse::where('laboratory_id', $laboratoryId)->get();
-            return view('centreanalyses.analyses.index', compact('analyses'));
-        }
-        $laboratoryId = auth()->user()->enseignants->map->laboratory->first()->id;
-
-        $analyses = FormulaireAnalyse::where('laboratory_id', $laboratoryId)->get();
-        return view('centreanalyses.analyses.index', compact('analyses'));
-    }
 }

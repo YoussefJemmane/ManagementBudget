@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdministrateurController;
 use App\Http\Controllers\CentreAnalyseController;
 use App\Http\Controllers\CentreAppuiController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\DirecteurController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EntrepriseController;
@@ -32,6 +33,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/dashboard', function () {
+
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -63,7 +66,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/delete/{id}', function ($id) {
             $user = User::find($id);
-            dd($user);
+            $user->delete();
+            return redirect()->route('users.index');
         })->name('users.destroy');
     });
 
@@ -97,6 +101,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/directeur/{directeur}/edit', [DirecteurController::class, 'edit'])->name('directeur.edit');
         Route::put('/directeur/{directeur}', [DirecteurController::class, 'update'])->name('directeur.update');
         Route::delete('/directeur/{directeur}', [DirecteurController::class, 'destroy'])->name('directeur.destroy');
+    });
+
+    Route::prefix('chart')->group(function () {
+        Route::get('/services', [ChartController::class, 'chartServices']);
     });
 
     Route::group(['middleware' => 'auth'], function () {
@@ -143,7 +151,6 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/formulaireanalyse', [FormulaireAnalyseController::class, 'index'])->name('formulaireanalyse.index');
         Route::get('/formulaireanalyse/listanalyeses', [FormulaireAnalyseController::class, 'list'])->name('listformulaireanalyse.index');
-        Route::get('/formulaireanalyse/listanalyesesbylabo', [FormulaireAnalyseController::class, 'listByLaboratory'])->name('listformulaireanalysebylabo.index');
         Route::get('/formulaireanalyse/create', [FormulaireAnalyseController::class, 'create'])->name('formulaireanalyse.create');
         Route::put('/formulaireanalyse/validationcentreanalyse/{formulaireanalyse}', [FormulaireAnalyseController::class, 'validationcentreanalyse'])->name('formulaireanalysevalidationcentreanalyse.update');
         Route::put('/formulaireanalyse/novalidationcentreanalyse/{formulaireanalyse}', [FormulaireAnalyseController::class, 'novalidationcentreanalyse'])->name('formulaireanalysenovalidationcentreanalyse.update');

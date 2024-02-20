@@ -7,11 +7,11 @@
 
     <div class="flex justify-center py-12 ">
         <div class="border rounded-md bg-white p-[20px]  w-[400px]">
-            <form method="POST" action="{{ route('formulaireformation.store') }}">
+            <form method="POST" action="{{ route('formulaireformation.store') }}" class="max-w-md pt-4 mx-auto">
                 @csrf
 
                 <!-- Numero des jours -->
-                <div>
+                <div class="relative z-0 w-full mb-5 group">
                     <x-input-label for="num_jour" :value="__('Numero des jours')" />
                     <x-text-input id="num_jour" class="block w-full mt-1" type="number" name="num_jour" :value="old('num_jour')" required autofocus autocomplete="num_jour" />
                     <x-input-error :messages="$errors->get('num_jour')" class="mt-2" />

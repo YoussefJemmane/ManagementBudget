@@ -28,7 +28,7 @@ class StudentController extends Controller
     public function create()
     {
         $enseignants = Enseignant::all();
-    return view('students.create', compact('enseignants'));
+        return view('students.create', compact('enseignants'));
     }
 
     /**
@@ -40,11 +40,11 @@ class StudentController extends Controller
         $student = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role' => 'student',
             'password' => Hash::make($request->password),
             'cin' => $request->cin,
             'phone' => $request->phone,
         ]);
+        $student->assignRole('student');
 
         $student->students()->create([
             'cne' => $request->cne,
@@ -53,9 +53,7 @@ class StudentController extends Controller
             'enseignant_id' => $request->enseignant_id,
         ]);
 
-        return redirect()->route('student.index');
-
-
+        return redirect()->route('users.index');
     }
 
     /**
@@ -88,6 +86,6 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $student->delete();
-        return redirect()->route('student.index');
+        return redirect()->route('user.index');
     }
 }
