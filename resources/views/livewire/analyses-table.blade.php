@@ -1,4 +1,6 @@
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+
+
     <div class="flex flex-wrap items-center justify-between pb-4">
         <input wire:model.live="search" type="text" placeholder="Search by benefactor's name" class="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300">
         @if(auth()->user()->hasRole('student'))
@@ -56,7 +58,11 @@
                 </thead>
                 <tbody>
                     @foreach ($analyses as $analyse)
+                        @php
+                            $showRow = auth()->user()->hasRole('centreanalyse') ? ($analyse->validation_enseignant == 'validate') : true;
+                        @endphp
 
+                        @if ($showRow)
                     <tr>
 
                         <td class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">{{ $analyse->user->name }}</td>
@@ -142,6 +148,7 @@
                         </td>
                         @endif
                     </tr>
+                    @endif
                     @endforeach
                 </tbody>
             </table>

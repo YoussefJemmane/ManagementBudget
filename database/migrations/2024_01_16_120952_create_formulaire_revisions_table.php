@@ -22,9 +22,10 @@ return new class extends Migration
             $table->string("laboratoire");
             $table->string("directeur_these");
             $table->string("phone_directeur_these");
-            $table->boolean("validation_directeur_these")->default(false);
-            $table->boolean("validation_centre_appui")->default(false);
-            $table->boolean("validation_directeur_laboartoire")->default(false);
+            $table->bigInteger("frais_du_service")->default(1640);
+            $table->enum("validation_centre_appui", ["pending", "validate","non validate"])->default("pending");
+            $table->enum("validation_directeur_labo", ["pending", "validate","non validate"])->default("pending");
+            $table->enum("validation_enseignant", ["pending", "validate","non validate"])->default("pending");
             $table->timestamps();
         });
     }
