@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum("validation_centre_analyse", ["pending", "validate","non validate"])->default("pending");
             $table->enum("validation_directeur_labo", ["pending", "validate","non validate"])->default("pending");
             $table->enum("validation_enseignant", ["pending", "validate","non validate"])->default("pending");
+            $table->enum("execution_analyse", ["pending", "execute","non excecute"])->default("non excecute");
             $table->timestamps();
         });
     }

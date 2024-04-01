@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Directeur;
 use App\Models\Enseignant;
 use App\Models\Laboratory;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+
 
 class LaboratoryController extends Controller
 {
@@ -15,8 +18,8 @@ class LaboratoryController extends Controller
     public function index()
     {
         $laboratories = Laboratory::all();
-
-        return view('laboratories.index', compact('laboratories'));
+        $users = User::all();
+        return view('laboratories.index', compact('laboratories', 'users'));
     }
 
     /**
@@ -24,11 +27,8 @@ class LaboratoryController extends Controller
      */
     public function create()
     {
-        // $directeurs = Directeur::all();
-        // only the directeur that don't have any laboratory
-        $directeurs = Directeur::doesntHave('laboratory')->get();
-
-        return view('laboratories.create', compact('directeurs'));
+       
+        return view('laboratories.create');
     }
 
     /**
@@ -39,12 +39,12 @@ class LaboratoryController extends Controller
         $request->validate([
            'name' => 'required',
            'budget' => 'required',
-           'directeur_id' => 'required',
+           
         ]);
         Laboratory::create([
             'name' => $request->name,
             'budget' => $request->budget,
-            'directeur_id' => $request->directeur_id,
+            
         ]);
         return redirect()->route('laboratory.index');
     }
@@ -54,7 +54,7 @@ class LaboratoryController extends Controller
      */
     public function show(Laboratory $laboratory)
     {
-        //
+        return view('laboratories.show', compact('laboratory'));
     }
 
     /**
@@ -62,7 +62,7 @@ class LaboratoryController extends Controller
      */
     public function edit(Laboratory $laboratory)
     {
-        //
+        return view('laboratories.edit', compact('laboratory'));
     }
 
     /**
@@ -70,7 +70,15 @@ class LaboratoryController extends Controller
      */
     public function update(Request $request, Laboratory $laboratory)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'budget' => 'required',
+        ]);
+        $laboratory->update([
+            'name' => $request->name,
+            'budget' => $request->budget,
+        ]);
+        return redirect()->route('laboratory.index');
     }
 
     /**

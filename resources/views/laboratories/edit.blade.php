@@ -7,12 +7,14 @@
 
     <div class="flex justify-center py-12 ">
         <div class="border rounded-md bg-white p-[20px]  w-[400px]">
-            <form method="POST" action="{{ route('laboratory.store') }}" class="max-w-md pt-4 mx-auto">
+            <form method="POST" action="{{ route('laboratory.update', $laboratory->id) }}" class="max-w-md pt-4 mx-auto">
                 @csrf
+                @method('PUT')
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <!-- Name -->
                     <div class="relative z-0 w-full mb-5 group">
                         <input type="text" name="name" id="name"
+                            value="{{ $laboratory->name ?? old('name') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" " required />
                         <label for="name"
@@ -24,6 +26,7 @@
                     <!-- Budget -->
                     <div class="relative z-0 w-full mb-5 group">
                         <input type="text" name="budget" id="budget"
+                            value="{{ $laboratory->budget ?? old('budget') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" " required />
                         <label for="budget"
@@ -38,7 +41,7 @@
 
 
                 <div class="flex items-center justify-end gap-4 mt-4">
-                    <button onclick="window.location='{{ route('laboratory.index') }}'"
+                    <button onclick="window.location='{{ route('users.index') }}'"
                         class="w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
                         {{ __('Annuler') }}
                     </button>

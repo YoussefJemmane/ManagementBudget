@@ -12,18 +12,13 @@ class Laboratory extends Model
         'id',
         'name',
         'budget',
-        'directeur_id',
     ];
-
-    public function directeur()
+    // a user that have a role of 'Dirceteur de laboratoire' can be assigned to a laboratory
+    public function users()
     {
-        return $this->belongsTo(Directeur::class, 'directeur_id');
+        return $this->hasMany(User::class, 'laboratory_id');
     }
-
-    public function enseignants()
-    {
-        return $this->hasMany(Enseignant::class, 'laboratory_id');
-    }
+   
 
 
 }

@@ -19,6 +19,12 @@ return new class extends Migration
             $table->string('password');
             $table->string('cin');
             $table->string('phone');
+            $table->string('etablissement')->nullable();
+            $table->string('cne')->nullable();
+            $table->date('date_inscription')->nullable();
+            $table->string('entreprise')->nullable();
+            $table->string('encadrant')->nullable();
+            $table->foreignId('laboratory_id')->nullable()->constrained('laboratories')->cascadeOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

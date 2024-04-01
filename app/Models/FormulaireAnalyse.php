@@ -21,6 +21,7 @@ class FormulaireAnalyse extends Model
         'validation_centre_analyse',
         'validation_directeur_labo',
         'validation_enseignant',
+        'execution_analyse',
     ];
 
     public function user()

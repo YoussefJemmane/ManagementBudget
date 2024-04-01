@@ -2,9 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\FormulairePublication;
-use App\Models\FormulaireTraduction;
-use App\Models\FormulaireRevision;
+use App\Models\Service;
 use Livewire\Component;
 
 class ChartServices extends Component
@@ -16,9 +14,9 @@ class ChartServices extends Component
     public function mount()
     {
 
-        $this->publicationCount = FormulairePublication::count();
-        $this->traductionCount = FormulaireTraduction::count();
-        $this->revisionCount = FormulaireRevision::count();
+        $this->publicationCount = Service::where('type_service', 'publication')->count();
+        $this->traductionCount = Service::where('type_service', 'traduction')->count();
+        $this->revisionCount = Service::where('type_service', 'revision')->count();
     }
 
     public function render()
