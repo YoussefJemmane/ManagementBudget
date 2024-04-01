@@ -13,13 +13,13 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'centreappuiAdmin']);
-        Role::create(['name' => 'centreappuiGestion']);
-        Role::create(['name' => 'centreanalyse']);
-        Role::create(['name' => 'student']);
-        Role::create(['name' => 'enseignant']);
-        Role::create(['name' => 'directeur']);
-        Role::create(['name' => 'entreprise']);
+        Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'Centre d\'appui']);
+        Role::create(['name' => 'Pole de recherche']);
+        Role::create(['name' => 'Centre d\'analyse']);
+        Role::create(['name' => 'Etudiant']);
+        Role::create(['name' => 'Enseignant']);
+        Role::create(['name' => 'Directeur de laboratoire']);
+        Role::create(['name' => 'Entreprise']);
     }
 }

@@ -16,17 +16,20 @@ class AnalysesTable extends Component
     public function render()
     {
         $user = auth()->user();
-
-        if (auth()->user()->hasRole('student')) {
+        // dd the user role from Spatie
+        
+        if (auth()->user()->hasRole('Etudiant')) {
             $analyses = FormulaireAnalyse::query()
                 ->where('user_id', $user->id)
                 ->paginate(10);
-        } else {
+        } 
+        // if the role is Enseignant or Directeur de laboratoire must show only the analyses that related to the laboratory_id
+        else if (auth()->user()->hasRole('Enseignant|Directeur de laboratoire')) {
             $analyses = FormulaireAnalyse::query()
-                ->whereHas('user', function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%');
-                })
+                ->where('laboratory_id', $user->laboratory_id)
                 ->paginate(10);
+        }else {
+            $analyses = FormulaireAnalyse::paginate(10);
         }
 
         return view('livewire.analyses-table', [

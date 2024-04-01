@@ -16,8 +16,26 @@ class FormulaireAnalyseController extends Controller
      */
     public function index()
     {
-        $analyses = FormulaireAnalyse::where('user_id', auth()->user()->id)->get();
-        return view('analyses.index', compact('analyses'));
+        if (Auth::user()->hasRole('Centre d\'analyse')) {
+            $analyses = FormulaireAnalyse::all();
+            return view('analyses.index', compact('analyses'));
+        }
+        if (Auth::user()->hasRole('Etudiant')) {
+            $analyses = FormulaireAnalyse::where('user_id', auth()->user()->id)->get();
+            return view('analyses.index', compact('analyses'));
+        }
+        if (Auth::user()->hasRole('Directeur de laboratoire')) {
+            $analyses = FormulaireAnalyse::where('laboratory_id', auth()->user()->laboratory_id)->get();
+            return view('analyses.index', compact('analyses'));
+        }
+        if (Auth::user()->hasRole('Enseignant')) {
+            $analyses = FormulaireAnalyse::where('laboratory_id', auth()->user()->laboratory_id)->get();
+            return view('analyses.index', compact('analyses'));
+        }
+        if (Auth::user()->hasRole('Admin')) {
+            $analyses = FormulaireAnalyse::all();
+            return view('analyses.index', compact('analyses'));
+        }
     }
 
     /**
@@ -156,7 +174,7 @@ class FormulaireAnalyseController extends Controller
             "prix_unitaire" => $prix_unitaire,
             "quantite" => $request->quantite,
             "prix_total" => $request->prix_unitaire * $request->quantite,
-            "laboratory_id" => auth()->user()->students->map->enseignant->map->laboratory_id->first(),
+            "laboratory_id" => auth()->user()->laboratory_id,
         ]);
 
         return redirect()->route('formulaireanalyse.index');
@@ -191,7 +209,7 @@ class FormulaireAnalyseController extends Controller
      */
     public function destroy(FormulaireAnalyse $formulaireAnalyse)
     {
-        //
+            
     }
 
     public function validationcentreanalyse(Request $request, FormulaireAnalyse $formulaireanalyse)
@@ -242,11 +260,19 @@ class FormulaireAnalyseController extends Controller
         ]);
         return redirect()->route('formulaireanalyse.index');
     }
-    public function list()
-    {
+    
 
-        $analyses = FormulaireAnalyse::all();
-        return view('centreanalyses.analyses.index', compact('analyses'));
+    public function pendinganalyse(Request $request, FormulaireAnalyse $formulaireanalyse){
+        $formulaireanalyse->update([
+            "execution_analyse" => "pending",
+        ]);
+        return redirect()->route('formulaireanalyse.index');
+    }
+    public function executeanalyse(Request $request, FormulaireAnalyse $formulaireanalyse){
+        $formulaireanalyse->update([
+            "execution_analyse" => "execute",
+        ]);
+        return redirect()->route('formulaireanalyse.index');
     }
 
 }

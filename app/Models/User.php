@@ -25,6 +25,11 @@ class User extends Authenticatable
         'password',
         'cin',
         'phone',
+        'etablissement',
+        'cne',
+        'date_inscription',
+        'entreprise',
+        'laboratory_id',
     ];
 
     /**
@@ -46,32 +51,58 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function students()
+    /**
+     * Validation rules for user creation/update
+     *
+     * @return array
+     */
+    public function rules()
     {
-        return $this->hasMany(Student::class, 'user_id');
+        return [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                function ($attribute, $value, $fail) {
+                    // Check if the user's role is Entreprise
+                    if ($this->assignRole('Entreprise')) {
+                        return; // Allow any email for users with role Entreprise
+                    }
+    
+                    // For other roles, validate the email domain
+                    if (!ends_with($value, 'uit.ac.ma')) {
+                        return $fail('The email must end with uit.ac.ma.');
+                    }
+                },
+                'unique:users',
+            ],
+            'password' => 'required|string|min:8|confirmed',
+            'cin' => 'required|string|max:255', 
+            'phone' => 'required|string|max:255', 
+            'etablissement' => 'nullable|string|max:255', 
+            'cne' => 'nullable|string|max:255', 
+            'date_inscription' => 'nullable|date', 
+            'entreprise' => 'nullable|string|max:255', 
+            'laboratory_id' => 'nullable|exists:laboratories,id',
+        ];
     }
 
-    public function enseignants()
+    /**
+     * a user that have a role of 'Dirceteur de laboratoire' can be assigned to a laboratory
+     */
+    public function laboratory()
     {
-        return $this->hasMany(Enseignant::class, 'user_id');
+        return $this->belongsTo(Laboratory::class, 'laboratory_id');
     }
 
-    public function directeurs()
+    /**
+     * a user have a role Entreprise have many formations
+     */
+    public function formations()
     {
-        return $this->hasMany(Directeur::class, 'user_id');
+        return $this->hasMany(FormulaireFormation::class, 'user_id');
     }
-
-    public function entreprises()
-    {
-        return $this->hasMany(Entreprise::class, 'user_id');
-    }
-    public function centreanalyses()
-    {
-        return $this->hasMany(CentreAnalyse::class, 'user_id');
-    }
-    public function centreappuis()
-    {
-        return $this->hasMany(CentreAppui::class, 'user_id');
-    }
+    
+    
 }

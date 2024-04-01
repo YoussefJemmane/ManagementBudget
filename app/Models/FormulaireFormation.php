@@ -12,12 +12,13 @@ class FormulaireFormation extends Model
         'id',
         'num_jour',
         'num_person',
-        'entreprise_id',
+        'user_id',
         'validation_centre_analyse',
         'prix',
     ];
-    public function entreprise()
+    // a user have a role Entreprise have many formations
+    public function user()
     {
-        return $this->belongsTo(Entreprise::class, 'entreprise_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

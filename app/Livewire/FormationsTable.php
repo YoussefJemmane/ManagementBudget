@@ -12,9 +12,8 @@ class FormationsTable extends Component
     public function render()
     {
         $formations = FormulaireFormation::query()
-            ->whereHas('entreprise', function ($query) {
-                $query->where('entreprise', 'like', '%' . $this->search . '%');
-            })
+            ->where('num_jour', 'like', '%' . $this->search . '%')
+            ->orWhere('num_person', 'like', '%' . $this->search . '%')
             ->get();
 
 

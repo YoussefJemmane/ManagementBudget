@@ -22,125 +22,90 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        // create fake data to each user role
+        $admin = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@uit.ac.ma',
             'password' => bcrypt('admin'),
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('admin');
-
-        Administrateur::create([
-            'user_id' => 1,
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
         ]);
+        $admin->assignRole('Admin');
 
-        User::create([
-            'name' => 'Directeur',
-            'email' => 'directeur@gmail.com',
-            'password' => bcrypt('directeur'),
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('directeur');
-
-        Directeur::create([
-            'user_id' => 2,
+        $centreAppui = User::factory()->create([
+            'name' => 'Centre d\'appui',
+            'email' => 'centreappui@uit.ac.ma',
+            'password' => bcrypt('centreappui'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
         ]);
+        $centreAppui->assignRole('Centre d\'appui');
 
-        Laboratory::create([
-            'name' => 'Science',
-            'budget' => 5000,
-            'directeur_id' => 1,
+        $poleRecherche = User::factory()->create([
+            'name' => 'Pole de recherche',
+            'email' => 'pole@uit.ac.ma',
+            'password' => bcrypt('pole'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
         ]);
+        $poleRecherche->assignRole('Pole de recherche');
 
-        User::create([
+        $centreAnalyse = User::factory()->create([
+            'name' => 'Centre d\'analyse',
+            'email' => 'centreanalyse@uit.ac.ma',
+            'password' => bcrypt('centreanalyse'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
+        ]);
+        $centreAnalyse->assignRole('Centre d\'analyse');
+
+        $etudiant = User::factory()->create([
+            'name' => 'Etudiant',
+            'email' => 'etudiant@uit.ac.ma',
+            'password' => bcrypt('etudiant'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
+            'etablissement' => 'ENSA',
+            'cne' => 'G123456',
+            'date_inscription' => now(),
+            'laboratory_id' => '1',
+
+        ]);
+        $etudiant->assignRole('Etudiant');
+
+        $enseignant = User::factory()->create([
             'name' => 'Enseignant',
-            'email' => 'enseignant@gmail.com',
+            'email' => 'enseignant@uit.ac.ma',
             'password' => bcrypt('enseignant'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
+            'etablissement' => 'ENSA',
+            'laboratory_id' => '1',
 
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('enseignant');
-
-        Enseignant::create([
-            'user_id' => 3,
-            'laboratory_id' => 1,
-            'ettablisement' => 'FSR',
         ]);
+        $enseignant->assignRole('Enseignant');
 
-        User::create([
-            'name' => 'student',
-            'email' => 'student@gmail.com',
-            'password' => bcrypt('student'),
-
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('student');
-
-        Student::create([
-            'user_id' => 4,
-            'cne' => 'G111111',
-            'date_inscription' => '2021-01-01',
-            'ettablisement' => 'FSR',
-            'enseignant_id' => 1,
+        $directeur = User::factory()->create([
+            'name' => 'Directeur de laboratoire',
+            'email' => 'directeur@uit.ac.ma',
+            'password' => bcrypt('directeur'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
+            'etablissement' => 'ENSA',
+            'laboratory_id' => '1',
         ]);
+        $directeur->assignRole('Directeur de laboratoire');
 
-        User::create([
+        $entreprise = User::factory()->create([
             'name' => 'Entreprise',
-            'email' => 'entreprise@gmail.com',
+            'email' => 'maltemafrica@gmail.com',
             'password' => bcrypt('entreprise'),
-
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('entreprise');
-
-        Entreprise::create([
-            'user_id' => 5,
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
             'entreprise' => 'Maltem Africa',
         ]);
+        $entreprise->assignRole('Entreprise');
 
-        FormulaireFormation::create([
-            'entreprise_id' => 1,
-            'num_jour' => 1,
-            'num_person' => 10,
-            'prix' => 1000 * 10,
-            'validation_centre_analyse' => "pending",
-        ]);
-
-        User::create([
-            'name' => 'Centre d\'analyse',
-            'email' => 'centreanalyse@gmail.com',
-            'password' => bcrypt('centreanalyse'),
-
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('centreanalyse');
-
-        CentreAnalyse::create([
-            'user_id' => 6,
-        ]);
-        User::create([
-            'name' => 'Centre d\'appui Gestion',
-            'email' => 'centreappuigestion@gmail.com',
-            'password' => bcrypt('centreappuigestion'),
-
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('centreappuiGestion');
-
-        CentreAppui::create([
-            'user_id' => 7,
-        ]);
-        User::create([
-            'name' => 'Centre d\'appui Admin',
-            'email' => 'centreappuiadmin@gmail.com',
-            'password' => bcrypt('centreappuiadmin'),
-
-            'cin' => 'EE111111',
-            'phone' => '0611111111',
-        ])->assignRole('centreappuiAdmin');
-
-        CentreAppui::create([
-            'user_id' => 8,
-        ]);
     }
+
 }

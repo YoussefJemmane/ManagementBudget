@@ -14,7 +14,7 @@ class FormulaireFormationController extends Controller
     public function index()
     {
         // only the formations that are realted to the current user (Entreprise table is the User and the Formation table have the entreprise_id)
-        $formations = FormulaireFormation::where('entreprise_id', Entreprise::where('user_id', auth()->user()->id)->get()->first()->id)->get();
+        $formations = FormulaireFormation::where('user_id', auth()->user()->id)->get();
         return view('formations.index', compact('formations'));
     }
     public function list()
@@ -47,7 +47,7 @@ class FormulaireFormationController extends Controller
         $formulaireFormation = FormulaireFormation::create([
             'num_jour' => $request->num_jour,
             'num_person' => $request->num_person,
-            'entreprise_id' => Entreprise::where('user_id', auth()->user()->id)->get()->first()->id,
+            'user_id' => auth()->user()->id,
             'prix' =>   $prix,
         ]);
         return redirect()->route('formulaireformation.index');
