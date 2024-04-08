@@ -45,7 +45,7 @@
                         </x-nav-link>
                     @endif
                     @if (auth()->user()->hasRole('Centre d\'appui|Admin'))
-                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('formulairetraduction.index')">
+                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                             {{ __('Services') }}
                         </x-nav-link>
                     @endif
@@ -53,7 +53,7 @@
                         <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
                             {{ __('Analyses') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('formulairetraduction.index')">
+                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                             {{ __('Services') }}
                         </x-nav-link>
                     @endif
@@ -62,7 +62,7 @@
                         <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
                             {{ __('Analyses') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('formulairetraduction.index')">
+                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                             {{ __('Services') }}
                         </x-nav-link>
                     @endif

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger("prix_unitaire");
             $table->bigInteger("quantite");
             $table->bigInteger("prix_total");
-            $table->foreignId("laboratory_id")->constrained("laboratories")->cascadeOnDelete()->nullable();
+            $table->foreignId("laboratory_id")->constrained("laboratories")->cascadeOnDelete();
             $table->enum("validation_centre_analyse", ["pending", "validate","non validate"])->default("pending");
             $table->enum("validation_directeur_labo", ["pending", "validate","non validate"])->default("pending");
             $table->enum("validation_enseignant", ["pending", "validate","non validate"])->default("pending");

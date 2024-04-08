@@ -59,6 +59,18 @@ class AdminSeeder extends Seeder
         ]);
         $centreAnalyse->assignRole('Centre d\'analyse');
 
+        
+        $enseignant = User::factory()->create([
+            'name' => 'Enseignant',
+            'email' => 'enseignant@uit.ac.ma',
+            'password' => bcrypt('enseignant'),
+            'cin' => 'EE123456',
+            'phone' => '0612345678',
+            'etablissement' => 'ENSA',
+            'laboratory_id' => '1',
+            
+        ]);
+        $enseignant->assignRole('Enseignant');
         $etudiant = User::factory()->create([
             'name' => 'Etudiant',
             'email' => 'etudiant@uit.ac.ma',
@@ -69,21 +81,10 @@ class AdminSeeder extends Seeder
             'cne' => 'G123456',
             'date_inscription' => now(),
             'laboratory_id' => '1',
+            'enseignant' => 'Enseignant',
 
         ]);
         $etudiant->assignRole('Etudiant');
-
-        $enseignant = User::factory()->create([
-            'name' => 'Enseignant',
-            'email' => 'enseignant@uit.ac.ma',
-            'password' => bcrypt('enseignant'),
-            'cin' => 'EE123456',
-            'phone' => '0612345678',
-            'etablissement' => 'ENSA',
-            'laboratory_id' => '1',
-
-        ]);
-        $enseignant->assignRole('Enseignant');
 
         $directeur = User::factory()->create([
             'name' => 'Directeur de laboratoire',

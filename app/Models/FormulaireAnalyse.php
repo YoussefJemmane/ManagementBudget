@@ -28,4 +28,9 @@ class FormulaireAnalyse extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function laboratory()
+    {
+        return $this->belongsTo(Laboratory::class, 'laboratory_id');
+    }
 }

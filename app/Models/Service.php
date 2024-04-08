@@ -20,6 +20,7 @@ class Service extends Model
         "qualite_article",
         "frais_service",
         "laboratory_id",
+        'execution_service',
         "validation_centre_appui",
         "validation_directeur_labo",
         "validation_enseignant",

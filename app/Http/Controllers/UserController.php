@@ -41,13 +41,13 @@ class UserController extends Controller
             'password' => 'required|string|min:8',
             'cin' => 'required|string|max:255', 
             'phone' => 'required|string|max:255', 
-            'etablissement' => 'nullable|string|max:255', 
+            'etablissement' => 'nullable|string', 
             'cne' => 'nullable|string|max:255', 
             'date_inscription' => 'nullable|date', 
             'entreprise' => 'nullable|string|max:255', 
             'laboratory_id' => 'nullable|exists:laboratories,id',
             'role' => 'required|string',
-            'encadrant' => 'nullable|string|max:255',
+            'enseignant' => 'nullable|string|max:255',
         ]);
         // update the roles to numbers then in each if statement we will add the role to $request->role
 
@@ -73,7 +73,7 @@ class UserController extends Controller
         }
         
         elseif ($request->role == 5) {
-            $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'cne', 'date_inscription', 'laboratory_id','encadrant'));
+            $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'cne', 'date_inscription', 'laboratory_id','enseignant'));
             $request->role = 'Etudiant';
         }
         
@@ -86,7 +86,6 @@ class UserController extends Controller
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'laboratory_id'));
             $request->role = 'Directeur de laboratoire';
         }
-        
         
 
         $role = Role::where('name', $request->role)->first();
@@ -114,17 +113,17 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email,' . $user->id . '|ends_with:uit.ac.ma',
-            'password' => 'nullable|string|min:8',
+            'email' => 'required|string|email|ends_with:uit.ac.ma',
+            'password' => 'required|string|min:8',
             'cin' => 'required|string|max:255', 
             'phone' => 'required|string|max:255', 
-            'etablissement' => 'nullable|string|max:255', 
+            'etablissement' => 'nullable|string', 
             'cne' => 'nullable|string|max:255', 
             'date_inscription' => 'nullable|date', 
             'entreprise' => 'nullable|string|max:255', 
             'laboratory_id' => 'nullable|exists:laboratories,id',
             'role' => 'required|string',
-            'encadrant' => 'nullable|string|max:255',
+            'enseignant' => 'nullable|string|max:255',
         ]);
         
         if ($request->role == 1) {
@@ -140,7 +139,7 @@ class UserController extends Controller
             $user->update($request->only('name', 'email', 'password', 'cin', 'phone'));
             $request->role = 'Centre d\'appui';
         } elseif ($request->role == 5) {
-            $user->update($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'cne', 'date_inscription', 'laboratory_id','encadrant'));
+            $user->update($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'cne', 'date_inscription', 'laboratory_id','enseignant'));
             $request->role = 'Etudiant';
         } elseif ($request->role == 6) {
             $user->update($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'laboratory_id'));
@@ -210,9 +209,35 @@ class UserController extends Controller
         $path = $request->file('file')->store('excel-files');
         $users = (new FastExcel)->import(storage_path('app/' . $path));
         foreach ($users as $user) {
-            User::create($user);
-        }
+            
 
+            $useradd = new User();
+            $useradd->name = $user['Name'];
+            $useradd->email = $user['Email'];
+            $useradd->password = $user['Password'];
+            $useradd->cin = $user['CIN'];
+            $useradd->phone = $user['Phone'];
+            $useradd->etablissement = $user['Etablissement'] ?? null;
+            $useradd->cne = $user['CNE'] ?? null;
+            $useradd->date_inscription = !empty($user['Date Inscription']) ? $user['Date Inscription'] : null;
+            $useradd->entreprise = $user['Entreprise'] ?? null;
+            $useradd->enseignant = $user['Enseignant'] ?? null;
+            $laboratory = Laboratory::where('name', $user['Laboratory'])->first();
+            if ($laboratory) {
+
+                $useradd->laboratory_id = $laboratory->id;
+            }
+            $role = Role::where('name', $user['Role'])->first();
+            if ($role) {
+                $useradd->assignRole($role);
+            }
+
+            $useradd->save();
+
+
+            
+        }
+        
         return redirect()->route('users.index');
     }
 

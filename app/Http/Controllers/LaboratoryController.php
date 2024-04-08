@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 use App\Models\Directeur;
 use App\Models\Enseignant;
@@ -86,7 +87,37 @@ class LaboratoryController extends Controller
      */
     public function destroy(Laboratory $laboratory)
     {
+        $laboratory->users()->update(['laboratory_id' => null]);
+
         $laboratory->delete();
         return redirect()->route('laboratory.index');
     }
+
+    // import
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,xlsx,xls',
+        ]);
+
+        $path = $request->file('file')->store('excel-files');
+        $labos = (new FastExcel)->import(storage_path('app/' . $path));
+        foreach ($labos as $labo) {
+            Laboratory::create([
+                'name' => $labo['Name'],
+                'budget' => $labo['Budget'],
+            ]);
+        }
+
+        return redirect()->route('laboratory.index');
+    
+    }
+
+    // export
+    public function export()
+    {
+        $labos = Laboratory::all();
+        return (new FastExcel($labos))->download('labos.xlsx');
+    }
+
 }
