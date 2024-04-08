@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("intitule_article")->nullable();
             $table->string("intitule_journal")->nullable();
             $table->string("ISSN")->nullable();
-            $table->string("Base_donnee_indexation")->nullable();
+            $table->string("base_donnee_indexation")->nullable();
             $table->string("qualite_article")->nullable();
             $table->string("frais_service")->nullable();
             $table->foreignId("laboratory_id")->constrained("laboratories")->cascadeOnDelete();

@@ -36,20 +36,71 @@
                             
                         </div>
                         <div class="flex mt-4">
-                            {{-- if role is Etudiant  --}}
-                            @if ($user->assignRole()->name == 'Etudiant')
-                                <div class="w-1/2">
-                                    <p class="font-bold">CNE:</p>
-                                    <p>{{ $user->cne }}</p>
-                                </div>
-                            @endif
-                            {{-- if there is a date_inscription --}}
-                            @if ($user->assignRole()->name == 'Etudiant')
-                                <div class="w-1/2">
-                                    <p class="font-bold">Date d'inscription:</p>
-                                    <p>{{ $user->date_inscription }}</p>
-                                </div>
-                            @endif
+                            
+
+                            @foreach ($user->roles as $role)
+                                @if ($role->name == 'Etudiant')
+                                    <div class="w-1/2">
+                                        <p class="font-bold">CNE:</p>
+                                        <p>{{ $user->cne }}</p>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <p class="font-bold">Date d'inscription:</p>
+                                        <p>{{ $user->date_inscription }}</p>
+                                    </div>
+                                @endif
+                                {{-- if the role is Directeur de Laboratoire show his laboratory --}}
+                                @if ($role->name == 'Directeur de laboratoire')
+                                    <div class="w-1/2">
+                                        <p class="font-bold">Laboratoire:</p>
+                                        <p>{{ $user->laboratory->name }}</p>
+                                    </div>
+                                @endif
+                                
+                                
+                            @endforeach
+                        </div>
+                        <div class="flex mt-4">
+                            
+
+                            @foreach ($user->roles as $role)
+                                @if ($role->name == 'Etudiant')
+                                    <div class="w-1/2">
+                                        <p class="font-bold">Ettablissement:</p>
+                                        <p>{{ $user->etablissement }}</p>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <p class="font-bold">Enseignant:</p>
+                                        <p>{{ $user->enseignant }}</p>
+                                    </div>
+                                @endif
+
+                                
+                            @endforeach
+                        </div>
+                        <div class="flex mt-4">
+                            
+
+                            @foreach ($user->roles as $role)
+                                @if ($role->name == 'Etudiant')
+                                    <div class="w-1/2">
+                                        <p class="font-bold">Laboratoire:</p>
+                                        <p>{{ $user->laboratory->name }}</p>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <p class="font-bold">Directeur de Laboratoire:</p>
+                                        @foreach ($user->laboratory->users as $user)
+                                            @if ($user->roles->first()->name == 'Directeur de laboratoire')
+                                                <p>{{ $user->name }}</p>
+                                            @endif
+                                            
+                                        @endforeach
+                                    </div>
+                                    
+                                @endif
+
+                                
+                            @endforeach
                         </div>
 
                         <div class="flex mt-4">

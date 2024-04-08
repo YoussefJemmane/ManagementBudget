@@ -52,16 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    // import and export
     Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
     Route::post('/users/export', [UserController::class, 'export'])->name('users.export');
-
-
-  
-    Route::prefix('chart')->group(function () {
-        Route::get('/services', [ChartController::class, 'chartServices']);
-    });
-
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/laboratory', [LaboratoryController::class, 'index'])->name('laboratory.index');
@@ -71,8 +63,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/laboratory/{laboratory}/edit', [LaboratoryController::class, 'edit'])->name('laboratory.edit');
         Route::put('/laboratory/{laboratory}', [LaboratoryController::class, 'update'])->name('laboratory.update');
         Route::delete('/laboratory/{laboratory}', [LaboratoryController::class, 'destroy'])->name('laboratory.destroy');
+        Route::post('/laboratory/import', [LaboratoryController::class, 'import'])->name('labos.import');
+        Route::post('/laboratory/export', [LaboratoryController::class, 'export'])->name('labos.export');
+    
     });
 
+    
 
 
     Route::group(['middleware' => 'auth'], function () {
@@ -123,7 +119,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('services', [ServiceController::class, 'index'])->name('services.index');
     Route::get('services/create', [ServiceController::class, 'create'])->name('services.create');
-    Route::put('services/addFraisService', [ServiceController::class, 'addFraisService'])->name('services.addFraisService');
+    Route::put('services/addFraisService/{service}', [ServiceController::class, 'addFraisService'])->name('services.addFraisService');
     Route::post('services', [ServiceController::class, 'store'])->name('services.store');
     Route::get('services/{service}', [ServiceController::class, 'show'])->name('services.show');
     Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
@@ -136,7 +132,7 @@ Route::middleware('auth')->group(function () {
     Route::put('services/novalidationcentreappui/{service}', [ServiceController::class, 'novalidationcentreappui'])->name('services.novalidationcentreappui');
     Route::put('services/novalidationdirecteurlabo/{service}', [ServiceController::class, 'novalidationdirecteurlabo'])->name('services.novalidationdirecteurlabo');
     Route::put('services/novalidationenseignant/{service}', [ServiceController::class, 'novalidationenseignant'])->name('services.novalidationenseignant');
-    Route::put('services/noexecutionservice/{service}', [ServiceController::class, 'nonexecutiondeservice'])->name('services.noexecutionservice');
+    Route::put('services/pendingservice/{service}', [ServiceController::class, 'pendingservice'])->name('services.pendingservice');
     
 });
 

@@ -17,7 +17,10 @@
                 "Analyses Environnementales"
             ],
             datasets: [{
-                data: [@json($analyses_chimiques), @json($spectroscopie), @json($spectrometrie), @json($microscopie), @json($cristallographie), @json($analyses_environnementales)],
+                data: [@json($analyses_chimiques), @json($spectroscopie),
+                    @json($spectrometrie), @json($microscopie),
+                    @json($cristallographie), @json($analyses_environnementales)
+                ],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.7)', // Red
                     'rgba(255, 159, 64, 0.7)', // Orange
@@ -29,7 +32,7 @@
             }]
         },
         options: {
-            responsive: false,
+            responsive: true,
             plugins: {
                 legend: {
                     position: 'top',

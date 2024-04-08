@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Notifications\ServiceStored;
+use App\Notifications\ServiceValidated;
+use App\Notifications\ServiceExecuted;
+use Spatie\Permission\Models\Role;
 
 class ServiceController extends Controller
 {
@@ -46,7 +51,7 @@ class ServiceController extends Controller
         // if radio button named servise have value traduction then type_service is traduction and if publication then type_service is publication else revision
         $type_service = $request->service === 'traduction' ? 'traduction' : ($request->service === 'publication' ? 'publication' : 'revision');
 
-        Service::create([
+        $service = Service::create([
             'user_id' => auth()->id(),
             'titre' => $request->titre,
             'type_service' => $type_service,
@@ -62,6 +67,14 @@ class ServiceController extends Controller
             'validation_directeur_labo' => 'pending',
             'validation_enseignant' => 'pending',
         ]);
+
+        // Get the enseignant
+    $enseignant = User::where('name', auth()->user()->enseignant)->first();
+        
+    // If the enseignant exists, send the notification
+    if ($enseignant) {
+        $enseignant->notify(new ServiceStored());
+    }
 
         return redirect()->route('services.index')->with('success', 'Service created successfully.');
 
@@ -124,7 +137,7 @@ class ServiceController extends Controller
         $service->update([
             'frais_service' => request('frais_service'),
         ]);
-
+        
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
@@ -143,7 +156,9 @@ class ServiceController extends Controller
     {
         $service->update([
             'validation_centre_appui' => 'validate',
+            'execution_service' => 'pending',
         ]);
+
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
@@ -155,6 +170,13 @@ class ServiceController extends Controller
             'validation_directeur_labo' => 'validate',
         ]);
 
+        // notify the centre d'appui there is no need to get the centre d'appui from the database because the centre d'appui is the user with the role of Centre d'appui
+        $centreAppui = User::Role('Centre d\'appui')->first();
+
+        // If the centre d'appui exists, send the notification
+        if ($centreAppui) {
+            $centreAppui->notify(new ServiceValidated());
+        }
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
@@ -164,6 +186,13 @@ class ServiceController extends Controller
         $service->update([
             'validation_enseignant' => 'validate',
         ]);
+        // notify the directeur de laboratoire from laboratory_id of the auth user about the validation of the service ServiceValidatedByEnseignant
+        $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
+        
+        // If the directeur exists, send the notification
+        if ($directeur) {
+            $directeur->notify(new ServiceValidated());
+        }
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
@@ -175,20 +204,27 @@ class ServiceController extends Controller
             'execution_service' => 'execute',
         ]);
 
-        return redirect()->route('services.index')->with('success', 'Service updated successfully.');
-    }
-
-    // Non Execution de service
-    public function nonexecutiondeservice(Service $service)
-    {
-        $service->update([
-            'execution_service' => 'non excecute',
-        ]);
-        // and the budget of the laboratory is decreased by the frais_service
+        // here you will get the budget of the laboratory that the user_id of the service belongs to and decrease the budget by the frais_service
         $service->laboratory->update([
             'budget' => $service->laboratory->budget - $service->frais_service,
         ]);
 
+        // notify the user that the service has been executed
+        $service->user->notify(new ServiceExecuted());
+
+        return redirect()->route('services.index')->with('success', 'Service updated successfully.');
+    }
+
+    // Non Execution de service
+    public function pendingservice(Service $service)
+    {
+        $service->update([
+            'execution_service' => 'pending',
+        ]);
+        // if i hit this after the execution already done i will increase the budget of the laboratory by the frais_service
+        $service->laboratory->update([
+            'budget' => $service->laboratory->budget + $service->frais_service,
+        ]);
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 

@@ -16,20 +16,26 @@ class AnalysesTable extends Component
     public function render()
     {
         $user = auth()->user();
-        // dd the user role from Spatie
         
-        if (auth()->user()->hasRole('Etudiant')) {
-            $analyses = FormulaireAnalyse::query()
-                ->where('user_id', $user->id)
-                ->paginate(10);
-        } 
-        // if the role is Enseignant or Directeur de laboratoire must show only the analyses that related to the laboratory_id
-        else if (auth()->user()->hasRole('Enseignant|Directeur de laboratoire')) {
-            $analyses = FormulaireAnalyse::query()
-                ->where('laboratory_id', $user->laboratory_id)
-                ->paginate(10);
-        }else {
-            $analyses = FormulaireAnalyse::paginate(10);
+        foreach($user->roles as $role) {
+            if($role->name == 'Centre d\'analyse') {
+                // add a condition that the role is Centre appui and the validation_enseignant from service table and validation_directeur_labo is == "validate"
+                $analyses = FormulaireAnalyse::where('validation_enseignant', 'validate')
+                    ->where('validation_directeur_labo', 'validate')
+                    ->paginate(10);
+            } elseif($role->name == 'Enseignant') {
+                $analyses = FormulaireAnalyse::where('laboratory_id', $user->laboratory_id)
+                    ->paginate(10);
+            } elseif($role->name == 'Etudiant') {
+                $analyses = FormulaireAnalyse::where('user_id', $user->id)
+                    ->paginate(10);
+            } elseif($role->name == 'Admin') {
+                $analyses = FormulaireAnalyse::paginate(10);
+            } elseif($role->name == 'Directeur de laboratoire') {
+                $analyses = FormulaireAnalyse::where('laboratory_id', $user->laboratory_id)
+                    ->where('validation_enseignant', 'validate')
+                    ->paginate(10);
+            }
         }
 
         return view('livewire.analyses-table', [

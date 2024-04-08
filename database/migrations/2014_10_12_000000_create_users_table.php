@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('cne')->nullable();
             $table->date('date_inscription')->nullable();
             $table->string('entreprise')->nullable();
-            $table->string('encadrant')->nullable();
-            $table->foreignId('laboratory_id')->nullable()->constrained('laboratories')->cascadeOnDelete();
+            $table->string('enseignant')->nullable();
+            $table->foreignId('laboratory_id')->nullable()->constrained('laboratories')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });
