@@ -7,7 +7,7 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
         }
-        
+
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -17,17 +17,17 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         h1 {
             color: #333;
             text-align: center;
         }
-        
+
         p {
             color: #666;
             text-align: center;
         }
-        
+
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -37,7 +37,7 @@
             border-radius: 4px;
             transition: background-color 0.3s;
         }
-        
+
         .button:hover {
             background-color: #45a049;
         }
@@ -47,7 +47,7 @@
     <div class="container">
         <h1>User Not Found</h1>
         <p>You have to be registered in the system to access this page.</p>
-        <p>Please go to the reception desk and they will assist you in adding your account.</p>
+        <p>Please go to the research center and they will assist you in adding your account.</p>
         <p>Thank you!</p>
     </div>
 </body>

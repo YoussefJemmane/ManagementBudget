@@ -28,7 +28,7 @@ class LaboratoryController extends Controller
      */
     public function create()
     {
-       
+
         return view('laboratories.create');
     }
 
@@ -40,12 +40,12 @@ class LaboratoryController extends Controller
         $request->validate([
            'name' => 'required',
            'budget' => 'required',
-           
+
         ]);
         Laboratory::create([
             'name' => $request->name,
             'budget' => $request->budget,
-            
+            'first_budget' => $request->budget,
         ]);
         return redirect()->route('laboratory.index');
     }
@@ -78,6 +78,7 @@ class LaboratoryController extends Controller
         $laboratory->update([
             'name' => $request->name,
             'budget' => $request->budget,
+            'first_budget' => $request->budget,
         ]);
         return redirect()->route('laboratory.index');
     }
@@ -110,7 +111,7 @@ class LaboratoryController extends Controller
         }
 
         return redirect()->route('laboratory.index');
-    
+
     }
 
     // export

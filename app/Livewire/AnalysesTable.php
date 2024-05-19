@@ -16,7 +16,7 @@ class AnalysesTable extends Component
     public function render()
     {
         $user = auth()->user();
-        
+
         foreach($user->roles as $role) {
             if($role->name == 'Centre d\'analyse') {
                 // add a condition that the role is Centre appui and the validation_enseignant from service table and validation_directeur_labo is == "validate"
@@ -24,7 +24,12 @@ class AnalysesTable extends Component
                     ->where('validation_directeur_labo', 'validate')
                     ->paginate(10);
             } elseif($role->name == 'Enseignant') {
+                $userName = $user->name;
+
                 $analyses = FormulaireAnalyse::where('laboratory_id', $user->laboratory_id)
+                    ->whereHas('user', function ($query) use ($userName) {
+                        $query->where('enseignant', $userName);
+                    })
                     ->paginate(10);
             } elseif($role->name == 'Etudiant') {
                 $analyses = FormulaireAnalyse::where('user_id', $user->id)

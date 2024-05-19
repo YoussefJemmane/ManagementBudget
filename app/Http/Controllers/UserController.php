@@ -23,11 +23,7 @@ class UserController extends Controller
         
         $roles = Role::all();
         // laboratories that are not assigned to any user that has the role 'Directeur de laboratoire'
-        $laboratories = Laboratory::whereDoesntHave('users', function ($query) {
-            $query->whereHas('roles', function ($query) {
-                $query->where('name', 'Directeur de laboratoire');
-            });
-        })->get();
+        $laboratories = Laboratory::all();
         $users = User::all();
         return view('users.create', compact('roles', 'laboratories', 'users'));
     }

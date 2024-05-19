@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('formulaire_formations', function (Blueprint $table) {
             $table->id();
-            $table->string('num_jour');
-            $table->string('num_person');
+            $table->integer('num_jour');
+            $table->integer('num_person');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum("validation_centre_analyse", ["pending", "validate","non validate"])->default("pending");
             $table->bigInteger('prix');

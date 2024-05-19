@@ -35,6 +35,18 @@ return [
             'root' => storage_path('app'),
             'throw' => false,
         ],
+        'public/services/articles' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/services/articles'),
+            'url' => env('APP_URL').'/storage/services/articles',
+            'visibility' => 'public',
+        ],
+        'public/services/lettre_acceptations' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/services/lettre_acceptations'),
+            'url' => env('APP_URL').'/storage/services/lettre_acceptations',
+            'visibility' => 'public',
+        ],
 
         'public' => [
             'driver' => 'local',

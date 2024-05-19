@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string("intitule_article")->nullable();
             $table->string("intitule_journal")->nullable();
             $table->string("ISSN")->nullable();
-            $table->string("base_donnee_indexation")->nullable();
+            $table->string("base_donne_indexation")->nullable();
             $table->string("qualite_article")->nullable();
             $table->string("frais_service")->nullable();
+            $table->text("article")->nullable();
+            $table->text("lettre_acceptation")->nullable();
             $table->foreignId("laboratory_id")->constrained("laboratories")->cascadeOnDelete();
             $table->enum("execution_service", ["pending", "execute","non excecute"])->default("non excecute");
             $table->enum("validation_centre_appui", ["pending", "validate","non validate"])->default("pending");
