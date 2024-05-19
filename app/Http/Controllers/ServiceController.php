@@ -8,7 +8,10 @@ use App\Models\User;
 use App\Notifications\ServiceStored;
 use App\Notifications\ServiceValidated;
 use App\Notifications\ServiceExecuted;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Storage;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class ServiceController extends Controller
 {
@@ -33,12 +36,15 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'titre' => 'required',
             'intitule_article' => 'nullable',
             'intitule_journal' => 'nullable',
+            'article' => 'nullable',
+            'lettre_acceptation' => 'nullable',
             'ISSN' => 'nullable',
-            'Base_donnee_indexation' => 'nullable',
+            'base_donne_indexation' => 'nullable',
             'qualite_article' => 'nullable',
             'frais_service' => 'nullable',
             'validation_centre_appui' => 'nullable',
@@ -46,10 +52,11 @@ class ServiceController extends Controller
             'validation_enseignant' => 'nullable',
         ]);
 
-        // if auth user is Enseignant then status is enseignant else doctorant
         $status = auth()->user()->role === 'Enseignant' ? 'enseignant' : 'doctorant';
-        // if radio button named servise have value traduction then type_service is traduction and if publication then type_service is publication else revision
         $type_service = $request->service === 'traduction' ? 'traduction' : ($request->service === 'publication' ? 'publication' : 'revision');
+
+        $article = $request->file('article')->store('public/services/articles');
+        $lettre_acceptation = $request->file('lettre_acceptation')->store('public/services/lettre_acceptations');
 
         $service = Service::create([
             'user_id' => auth()->id(),
@@ -59,22 +66,23 @@ class ServiceController extends Controller
             'intitule_article' => $request->intitule_article,
             'intitule_journal' => $request->intitule_journal,
             'ISSN' => $request->ISSN,
-            'Base_donnee_indexation' => $request->Base_donnee_indexation,
+            'base_donne_indexation' => $request->base_donne_indexation,
             'qualite_article' => $request->qualite_article,
             'frais_service' => $request->frais_service,
             'laboratory_id' => auth()->user()->laboratory_id,
+            'article' => $article,
+            'lettre_acceptation' => $lettre_acceptation,
             'validation_centre_appui' => 'pending',
             'validation_directeur_labo' => 'pending',
             'validation_enseignant' => 'pending',
         ]);
 
-        // Get the enseignant
-    $enseignant = User::where('name', auth()->user()->enseignant)->first();
-        
-    // If the enseignant exists, send the notification
-    if ($enseignant) {
-        $enseignant->notify(new ServiceStored());
-    }
+        $centreAppui = User::Role('Centre d\'appui')->first();
+
+        // If the centre d'appui exists, send the notification
+        if ($centreAppui) {
+            $centreAppui->notify(new ServiceStored());
+        }
 
         return redirect()->route('services.index')->with('success', 'Service created successfully.');
 
@@ -106,25 +114,39 @@ class ServiceController extends Controller
             'intitule_article' => 'nullable',
             'intitule_journal' => 'nullable',
             'ISSN' => 'nullable',
-            'Base_donnee_indexation' => 'nullable',
+            'base_donne_indexation' => 'nullable',
             'qualite_article' => 'nullable',
             'frais_service' => 'nullable',
             'validation_centre_appui' => 'nullable',
             'validation_directeur_labo' => 'nullable',
             'validation_enseignant' => 'nullable',
+            'article' => 'nullable',
+            'lettre_acceptation' => 'nullable',
         ]);
+        // if auth user is Enseignant then status is enseignant else doctorant
+        $status = auth()->user()->role === 'Enseignant' ? 'enseignant' : 'doctorant';
+        // if radio button named servise have value traduction then type_service is traduction and if publication then type_service is publication else revision
+        $type_service = $request->service === 'traduction' ? 'traduction' : ($request->service === 'publication' ? 'publication' : 'revision');
+        $article = $request->file('article')->store('public/services/articles');
+        $lettre_acceptation = $request->file('lettre_acceptation')->store('public/services/lettre_acceptations');
 
         $service->update([
+
             'titre' => $request->titre,
+            'type_service' => $type_service,
+            'status' => $status,
             'intitule_article' => $request->intitule_article,
             'intitule_journal' => $request->intitule_journal,
             'ISSN' => $request->ISSN,
-            'Base_donnee_indexation' => $request->Base_donnee_indexation,
+            'base_donne_indexation' => $request->base_donne_indexation,
             'qualite_article' => $request->qualite_article,
             'frais_service' => $request->frais_service,
-            'validation_centre_appui' => $request->validation_centre_appui,
-            'validation_directeur_labo' => $request->validation_directeur_labo,
-            'validation_enseignant' => $request->validation_enseignant,
+            'laboratory_id' => auth()->user()->laboratory_id,
+            'article' => $article,
+            'lettre_acceptation' => $lettre_acceptation,
+            'validation_centre_appui' => 'pending',
+            'validation_directeur_labo' => 'pending',
+            'validation_enseignant' => 'pending',
         ]);
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
@@ -133,11 +155,11 @@ class ServiceController extends Controller
     // a method for adding a frais_service to a service
     public function addFraisService(Service $service)
     {
-        
+
         $service->update([
             'frais_service' => request('frais_service'),
         ]);
-        
+
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
@@ -154,11 +176,16 @@ class ServiceController extends Controller
     // Validation de Centre d'appui
     public function validationcentreappui(Service $service)
     {
+        $enseignant = User::Role('Enseignant')->first();
+
+        // If the centre d'appui exists, send the notification
+        if ($enseignant) {
+            $enseignant->notify(new ServiceValidated());
+        }
         $service->update([
             'validation_centre_appui' => 'validate',
             'execution_service' => 'pending',
         ]);
-
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
@@ -188,7 +215,7 @@ class ServiceController extends Controller
         ]);
         // notify the directeur de laboratoire from laboratory_id of the auth user about the validation of the service ServiceValidatedByEnseignant
         $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
-        
+
         // If the directeur exists, send the notification
         if ($directeur) {
             $directeur->notify(new ServiceValidated());
@@ -256,5 +283,28 @@ class ServiceController extends Controller
         ]);
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
+    }
+    public function downloadArticle(Service $service)
+    {
+        $file = Storage::disk('public/services/articles')->get($service->article);
+        return response()->download(storage_path('app/' . $service->article));
+    }
+    public function downloadLettreAcceptation(Service $service)
+    {
+        $file = Storage::disk('public/services/lettre_acceptations')->get($service->lettre_acceptation);
+        return response()->download(storage_path('app/' . $service->lettre_acceptation));
+    }
+
+    public function generatepdf(Service $service)
+    {
+        $data=[
+            'service'=>$service
+        ];
+
+        $pdf=Pdf::loadView('services.pdf',$data);
+
+        return response()->streamDownload(function() use($pdf){
+            echo $pdf->stream();
+        },'service.pdf');
     }
 }

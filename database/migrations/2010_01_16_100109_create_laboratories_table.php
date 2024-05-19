@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('laboratories', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("budget");
+            $table->bigInteger("budget");
+            $table->bigInteger("first_budget");
             $table->timestamps();
         });
     }

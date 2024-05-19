@@ -17,11 +17,13 @@ class LaboratorySeeder extends Seeder
         $laboratory = Laboratory::create([
             'name' => 'Laboratoire de recherche en informatique',
             'budget' => '1000000',
+            "first_budget" => '1000000',
         ]);
         $laboratory = Laboratory::create([
             'name' => 'Laboratoire de recherche en biologie',
             'budget' => '1000000',
+            "first_budget" => '1000000',
         ]);
-        
+
     }
 }

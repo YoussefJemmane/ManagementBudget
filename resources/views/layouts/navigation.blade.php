@@ -7,7 +7,7 @@
                 <div class="flex items-center shrink-0">
                     <a href="{{ route('dashboard') }}">
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="60px"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="70px" height="130px"
                             viewBox="0 0 267 300" enable-background="new 0 0 267 300" xml:space="preserve">
                             <x-application-logo class="block w-auto text-gray-800 fill-current h-9" />
                         </svg>
@@ -41,29 +41,29 @@
                             {{ __('Formations') }}
                         </x-nav-link>
                         <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
-                            {{ __('Analyses') }}
+                            {{ __('Centre d\'Analyses') }}
                         </x-nav-link>
                     @endif
                     @if (auth()->user()->hasRole('Centre d\'appui|Admin'))
                         <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                            {{ __('Services') }}
+                            {{ __('Centre d\'appui') }}
                         </x-nav-link>
                     @endif
                     @if (auth()->user()->hasRole('Directeur de laboratoire|Enseignant'))
                         <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
-                            {{ __('Analyses') }}
+                            {{ __('Centre d\'Analyses') }}
                         </x-nav-link>
                         <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                            {{ __('Services') }}
+                            {{ __('Centre d\'appui') }}
                         </x-nav-link>
                     @endif
 
                     @if (auth()->user()->hasRole('Etudiant'))
                         <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
-                            {{ __('Analyses') }}
+                            {{ __('Centre d\'Analyses') }}
                         </x-nav-link>
                         <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                            {{ __('Services') }}
+                            {{ __('Centre d\'appui') }}
                         </x-nav-link>
                     @endif
                 </div>

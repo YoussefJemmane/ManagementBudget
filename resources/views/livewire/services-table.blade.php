@@ -226,31 +226,46 @@
                                 </td>
                             @endif
                             @if (auth()->user()->hasRole('Centre d\'appui|Etudiant'))
-                                <td
-                                    class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+
                                     @if (auth()->user()->hasRole('Etudiant'))
-                                        <a href="{{ route('services.edit', $service->id) }}"
-                                            class="text-indigo-600 ">Edit</a>
-                                        <a href="{{ route('services.show', $service->id) }}"
-                                            class="text-yellow-600 ">Show</a>
-                                        <form action="{{ route('services.destroy', $service->id) }}" method="POST"
-                                            class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            {{-- a button without borders just Delete text in red --}}
-                                            <button type="submit" class="text-red-600 ">Delete</button>
-                                        </form>
+                                        @if($service->execution_service === "execute")
+                                            {{--                                            return a button download have route analyse.generatepdf--}}
+                                            <td
+                                                class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+                                                <a href="{{ route('services.generatepdf', $service->id) }}"
+                                                   class="text-green-600 ">Download</a>
+                                            </td>
+
+                                        @else
+                                        <td
+                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+                                            <a href="{{ route('services.edit', $service->id) }}"
+                                                class="text-indigo-600 ">Edit</a>
+                                            <a href="{{ route('services.show', $service->id) }}"
+                                                class="text-yellow-600 ">Show</a>
+                                            <form action="{{ route('services.destroy', $service->id) }}" method="POST"
+                                                class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                {{-- a button without borders just Delete text in red --}}
+                                                <button type="submit" class="text-red-600 ">Delete</button>
+                                            </form>
+                                        </td>
+                                       @endif
                                     @endif
 
                                     @if (auth()->user()->hasRole('Centre d\'appui'))
                                         @if ($service->frais_service)
+                                                <td
+                                                    class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
                                             <button data-modal-target="frais-modal" data-modal-toggle="frais-modal"
                                                 @click="showModal = true; serviceId = {{ $service->id }}"
                                                 data-service-id="{{ $service->id }}"
                                                 class="text-blue-600">Edit</button>
+                                        </td>
                                         @endif
                                     @endif
-                                </td>
+
                             @endif
                         </tr>
                     @endforeach
