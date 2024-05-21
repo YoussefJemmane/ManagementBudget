@@ -21,40 +21,46 @@
                             </div>
                             <div class="w-1/2">
                                 <p class="font-bold">Demendeur :</p>
-                                @foreach ($service->laboratory->users as $user)
-                                    @foreach ($user->roles as $role)
+                                @php
+                                    $user = $service->user;
+                                    $roles = $user->roles;
+                                    $nameParts = explode(" ", $user->name);
+                                @endphp
+                                    @foreach ($roles as $role)
                                         @if ($role->name == 'Etudiant')
-                                            {{--                                        must part the nom and prenom by " " from {{ $user->name }}--}}
-                                            <p>Nom : {{ explode(" ", $user->name)[0] }}</p>
-                                            <p>Prenom : {{ explode(" ", $user->name)[1] }}</p>
+                                        @if (!empty($nameParts[1]))
+                                            <p>Nom : {{ $nameParts[0] }}</p>
+                                            <p>Prenom : {{ $nameParts[1] }}</p>
+                                        @else
+                                            <p>{{ $user->name }}</p>
+                                        @endif
                                         @endif
 
                                     @endforeach
-                                @endforeach
+
                             </div>
                         </div>
                         <div class="flex">
                             <div class="w-1/2">
                                 <p class="font-bold">Telephone:</p>
-                                @foreach($service->laboratory->users as $user)
-                                    @foreach($user->roles as $role)
+
+                                    @foreach($roles as $role)
                                         @if($role->name == 'Etudiant')
                                             <p>{{ $user->phone }}</p>
                                         @endif
                                     @endforeach
 
-                                @endforeach
                             </div>
                             <div class="w-1/2">
                                 <p class="font-bold">Email :</p>
-                                @foreach ($service->laboratory->users as $user)
-                                    @foreach ($user->roles as $role)
+
+                                    @foreach ($roles as $role)
                                         @if ($role->name == 'Etudiant')
                                             <p>{{ $user->email }}</p>
                                         @endif
 
                                     @endforeach
-                                @endforeach
+
                             </div>
                         </div>
                         <div class="flex">

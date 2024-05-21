@@ -101,11 +101,16 @@
                     @php
                         $user = $formulaireanalyse->user;
                         $roles = $user->roles;
+                        $nameParts = explode(" ", $user->name);
                     @endphp
                     @foreach ($roles as $role)
                         @if ($role->name == 'Etudiant')
-                            Nom: {{ explode(" ", $user->name)[0] }}<br>
-                            Prenom: {{ explode(" ", $user->name)[1] }}
+                            @if (!empty($nameParts[1]))
+                            Nom : {{ $nameParts[0] }}<br>
+                            Prenom : {{ $nameParts[1] }}
+                            @else
+                                <p>{{ $user->name }}</p>
+                            @endif
                         @endif
                     @endforeach
                 </td>
