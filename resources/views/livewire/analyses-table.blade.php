@@ -81,11 +81,10 @@
                                     Status de Enseignant</th>
                             @endif
 
-                            @if (auth()->user()->hasRole('Etudiant'))
                                 <th scope="col"
                                     class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                     Action</th>
-                            @endif
+                          
                     </tr>
                 </thead>
                 <tbody>
@@ -258,7 +257,15 @@
                                                 </td>
                                         @endif
 
-                                    @endif
+                                @else
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+
+                                        <a href="{{ route('formulaireanalyse.show', $analyse->id) }}"
+                                           class="text-yellow-600 " @if (($analyse->execution_analyse === 'execute')) disabled @endif> Show</a>
+
+                                    </td>
+                                @endif
                             </tr>
                         @endif
                     @endforeach
