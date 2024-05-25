@@ -56,8 +56,9 @@ class ServiceController extends Controller
         $type_service = $request->service === 'traduction' ? 'traduction' : ($request->service === 'publication' ? 'publication' : 'revision');
 
         $article = $request->file('article')->store('public/services/articles');
-        $lettre_acceptation = $request->file('lettre_acceptation')->store('public/services/lettre_acceptations');
-
+        $lettre_acceptation = $request->hasFile('lettre_acceptation')
+            ? $request->file('lettre_acceptation')->store('public/services/lettre_acceptations')
+            : null;
         $service = Service::create([
             'user_id' => auth()->id(),
             'titre' => $request->titre,
@@ -128,8 +129,9 @@ class ServiceController extends Controller
         // if radio button named servise have value traduction then type_service is traduction and if publication then type_service is publication else revision
         $type_service = $request->service === 'traduction' ? 'traduction' : ($request->service === 'publication' ? 'publication' : 'revision');
         $article = $request->file('article')->store('public/services/articles');
-        $lettre_acceptation = $request->file('lettre_acceptation')->store('public/services/lettre_acceptations');
-
+        $lettre_acceptation = $request->hasFile('lettre_acceptation')
+            ? $request->file('lettre_acceptation')->store('public/services/lettre_acceptations')
+            : null;
         $service->update([
 
             'titre' => $request->titre,

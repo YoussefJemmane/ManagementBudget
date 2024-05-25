@@ -78,11 +78,12 @@
                                 <p class="font-bold">Article :</p>
                                 <a href="{{ route('services.articlePDF', ['service' => $service->id]) }}">Telecharger</a>
                             </div>
-                            <div class="w-1/2">
-                                <p class="font-bold">Lettre d'acceptation :</p>
-                                <a href="{{ route('services.lettreacceptationPDF', ['service' => $service->id]) }}">Telecharger</a>
-
-                            </div>
+                            @if($service->lettre_acceptation)
+                                <div class="w-1/2">
+                                    <p class="font-bold">Lettre d'acceptation :</p>
+                                    <a href="{{ route('services.lettreacceptationPDF', ['service' => $service->id]) }}">Telecharger</a>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex mt-4">
