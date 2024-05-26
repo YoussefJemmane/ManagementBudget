@@ -14,7 +14,8 @@ class FormationsTable extends Component
         $formations = FormulaireFormation::query()
             ->where('num_jour', 'like', '%' . $this->search . '%')
             ->orWhere('num_person', 'like', '%' . $this->search . '%')
-            ->get();
+
+            ->paginate(10);
 
 
         return view('livewire.formations-table', [

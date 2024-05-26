@@ -21,7 +21,7 @@ class FormulaireFormationController extends Controller
     {
         // only the formations that are realted to the current user (Entreprise table is the User and the Formation table have the entreprise_id)
         $formations = FormulaireFormation::all();
-        return view('centreanalyses.formations.index', compact('formations'));
+        return view('formations.index', compact('formations'));
     }
 
     /**

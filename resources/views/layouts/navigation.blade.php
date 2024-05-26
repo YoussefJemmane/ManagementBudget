@@ -16,11 +16,11 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if (auth()->user()->hasRole('Admin'))
+
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
-                    @endif
+
                     @if (auth()->user()->hasRole('Pole de recherche'))
                         <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                             {{ __('Utilisateurs') }}
@@ -36,15 +36,15 @@
                         </x-nav-link>
                     @endif
 
-                    @if (auth()->user()->hasRole('Centre d\'analyse|Admin'))
-                        <x-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('listformulaireformation.index')">
+                    @if (auth()->user()->hasRole('Centre d\'analyse|Pole de recherche'))
+                        <x-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
                             {{ __('Formations') }}
                         </x-nav-link>
                         <x-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
                             {{ __('Centre d\'Analyses') }}
                         </x-nav-link>
                     @endif
-                    @if (auth()->user()->hasRole('Centre d\'appui|Admin'))
+                    @if (auth()->user()->hasRole('Centre d\'appui|Pole de recherche'))
                         <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                             {{ __('Centre d\'appui') }}
                         </x-nav-link>

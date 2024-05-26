@@ -11,6 +11,7 @@ use App\Notifications\AnalyseStored;
 use App\Notifications\AnalyseExecuted;
 use App\Notifications\AnalyseValidated;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\AnalyseRefuser;
 
 class FormulaireAnalyseController extends Controller
 {
@@ -342,6 +343,11 @@ class FormulaireAnalyseController extends Controller
             "validation_centre_analyse" => "non validate",
         ]);
 
+        $user = $formulaireanalyse->user;
+
+
+        $user->notify(new \App\Notifications\AnalyseRefuser());
+
         return redirect()->route('formulaireanalyse.index');
     }
     public function validationdirecteurlabo(Request $request, FormulaireAnalyse $formulaireanalyse)
@@ -353,7 +359,6 @@ class FormulaireAnalyseController extends Controller
 
         $centreAnalyse = User::Role('Centre d\'analyse')->first();
 
-        // If the centre d'appui exists, send the notification
         if ($centreAnalyse) {
             $centreAnalyse->notify(new AnalyseValidated());
         }
@@ -366,6 +371,12 @@ class FormulaireAnalyseController extends Controller
             "validation_directeur_labo" => "non validate",
         ]);
 
+        $centreAnalyse = User::Role('Centre d\'analyse')->first();
+
+        if ($centreAnalyse) {
+            $centreAnalyse->notify(new AnalyseRefuser());
+        }
+
         return redirect()->route('formulaireanalyse.index');
     }
     public function validationenseignant(Request $request, FormulaireAnalyse $formulaireanalyse)
@@ -374,10 +385,8 @@ class FormulaireAnalyseController extends Controller
             "validation_enseignant" => "validate",
         ]);
 
-        // notify the directeur de laboratoire from laboratory_id of the auth user about the validation of the service ServiceValidatedByEnseignant
         $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
 
-        // If the directeur exists, send the notification
         if ($directeur) {
             $directeur->notify(new AnalyseValidated());
         }
@@ -388,6 +397,13 @@ class FormulaireAnalyseController extends Controller
         $formulaireanalyse->update([
             "validation_enseignant" => "non validate",
         ]);
+
+        $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
+
+        if ($directeur) {
+            $directeur->notify(new AnalyseRefuser());
+        }
+
         return redirect()->route('formulaireanalyse.index');
     }
 
@@ -395,18 +411,19 @@ class FormulaireAnalyseController extends Controller
     public function pendinganalyse(Request $request, FormulaireAnalyse $formulaireanalyse){
         $formulaireanalyse->update([
             "execution_analyse" => "pending",
-        ]);
 
+        ]);
         // if i hit this after the execution already done i will increase the budget of the laboratory by the prix_total
         $formulaireanalyse->laboratory->update([
             'budget' => $formulaireanalyse->laboratory->budget + $formulaireanalyse->prix_total,
         ]);
         return redirect()->route('formulaireanalyse.index');
     }
+
+
     public function executeanalyse(Request $request, FormulaireAnalyse $formulaireanalyse){
 
         if ($formulaireanalyse->laboratory->budget < $formulaireanalyse->prix_total) {
-
             $newBudget = $formulaireanalyse->laboratory->budget - $formulaireanalyse->prix_total;
 
             $validator = Validator::make(['budget' => $newBudget], [

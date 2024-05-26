@@ -29,14 +29,17 @@
                         <th scope="col"
                             class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                             Prix total</th>
-                        @if (auth()->user()->hasRole('Entreprise'))
-                            <th scope="col"
-                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                Action</th>
-                        @endif
                         <th scope="col"
                             class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                             Validation</th>
+                        <th scope="col"
+                            class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                            Status de Validation</th>
+                        @if (auth()->user()->hasRole('Entreprise'))
+                                <th scope="col"
+                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                    Action</th>
+                            @endif
                     </tr>
                     @foreach ($formations as $formation)
                         <tr>
@@ -58,6 +61,31 @@
                             <td
                                 class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
                                 {{ $formation->prix }}</td>
+                            <td
+                                class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+                                @if (auth()->user()->hasRole('Centre d\'analyse'))
+                                    <form
+                                        action="{{ route('formulaireformation.validationcentreanalyse', $formation->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="text-blue-600 ">Validate</button>
+                                    </form>
+                                    <form
+                                        action="{{ route('formulaireformation.novalidationcentreanalyse', $formation->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="text-red-600 ">No Validate</button>
+                                    </form>
+                                @endif
+
+                            </td>
+                            <td
+                                class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+
+                                {{ $formation->validation_centre_analyse }}
+                            </td>
                             @if (auth()->user()->hasRole('Entreprise'))
                                 <td
                                     class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
@@ -74,31 +102,15 @@
                                     </form>
                                 </td>
                             @endif
-                            <td
-                                class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-                                @if (auth()->user()->hasRole('Centre d\'analyse'))
-                                    <form
-                                        action="{{ route('formulaireformationvalidationcentreanalyse.update', $formation->id) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="text-blue-600 ">Validate</button>
-                                    </form>
-                                    <form
-                                        action="{{ route('formulaireformationnovalidationcentreanalyse.update', $formation->id) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="text-red-600 ">No Validate</button>
-                                    </form>
-                                @endif
-                                {{ $formation->validation_centre_analyse }}
-                            </td>
+
 
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="m-4">
+                {{ $formations->links() }}
+            </div>
         </div>
     </div>
 </div>

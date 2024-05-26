@@ -24,9 +24,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/dashboard', function () {
+    $user = Auth::user();
 
-
-    return view('dashboard');
+    return view('dashboard', compact('user'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

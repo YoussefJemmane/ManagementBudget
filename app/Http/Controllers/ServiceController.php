@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Notifications\ServiceRefuser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Notifications\ServiceStored;
@@ -215,10 +216,10 @@ class ServiceController extends Controller
         $service->update([
             'validation_enseignant' => 'validate',
         ]);
-        // notify the directeur de laboratoire from laboratory_id of the auth user about the validation of the service ServiceValidatedByEnseignant
+
         $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
 
-        // If the directeur exists, send the notification
+
         if ($directeur) {
             $directeur->notify(new ServiceValidated());
         }
@@ -264,6 +265,18 @@ class ServiceController extends Controller
             'validation_centre_appui' => 'non validate',
         ]);
 
+        $user = $service->user;
+
+        $user->notify(new \App\Notifications\ServiceRefuser());
+
+        $enseignantName = $user->enseignant;
+
+        $enseignant = User::where('name', $enseignantName)->first();
+
+        if ($enseignant) {
+            $enseignant->notify(new \App\Notifications\ServiceRefuser());
+        }
+
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
@@ -274,6 +287,17 @@ class ServiceController extends Controller
             'validation_directeur_labo' => 'non validate',
         ]);
 
+        $user = $service->user;
+
+        $user->notify(new \App\Notifications\ServiceRefuser());
+
+
+        $centreAppui = User::Role('Centre d\'appui')->first();
+
+        if ($centreAppui) {
+            $centreAppui->notify(new \App\Notifications\ServiceRefuser());
+        }
+
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
@@ -283,6 +307,20 @@ class ServiceController extends Controller
         $service->update([
             'validation_enseignant' => 'non validate',
         ]);
+
+        $user = $service->user;
+
+        $user->notify(new \App\Notifications\ServiceRefuser());
+
+        $laboratory = $user->laboratory;
+
+        $directeur = User::where('laboratory_id', $laboratory->id)->Role('Directeur de laboratoire')->first();
+
+
+
+        if ($directeur) {
+            $directeur->notify(new \App\Notifications\ServiceRefuser());
+        }
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
@@ -299,14 +337,12 @@ class ServiceController extends Controller
 
     public function generatepdf(Service $service)
     {
-        $data=[
-            'service'=>$service
+        $data = [
+            'service' => $service
         ];
 
-        $pdf=Pdf::loadView('services.pdf',$data);
+        $pdf = Pdf::loadView('services.pdf', $data);
 
-        return response()->streamDownload(function() use($pdf){
-            echo $pdf->stream();
-        },'service.pdf');
+        return $pdf->download('service.pdf');
     }
 }

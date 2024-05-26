@@ -39,12 +39,12 @@ class ServicesTable extends Component
                 elseif($role->name == 'Etudiant')
                 {
                     $services = Service::where('user_id', $user->id)->paginate(10);
-                }elseif($role->name == 'Admin')
+                }elseif($role->name == 'Pole de recherche')
                 {
                     $services = Service::paginate(10);
                 }elseif($role->name == 'Directeur de laboratoire')
                 {
-                    $services = Service::where('laboratory_id', $user->laboratory_id)->paginate(10)->where('validation_enseignant', 'validate');
+                    $services = Service::where('laboratory_id', $user->laboratory_id)->where('validation_enseignant', 'validate')->paginate(10);
                 }
             }
 

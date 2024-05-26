@@ -19,7 +19,6 @@ class AnalysesTable extends Component
 
         foreach($user->roles as $role) {
             if($role->name == 'Centre d\'analyse') {
-                // add a condition that the role is Centre appui and the validation_enseignant from service table and validation_directeur_labo is == "validate"
                 $analyses = FormulaireAnalyse::where('validation_enseignant', 'validate')
                     ->where('validation_directeur_labo', 'validate')
                     ->paginate(10);
@@ -34,7 +33,7 @@ class AnalysesTable extends Component
             } elseif($role->name == 'Etudiant') {
                 $analyses = FormulaireAnalyse::where('user_id', $user->id)
                     ->paginate(10);
-            } elseif($role->name == 'Admin') {
+            } elseif($role->name == 'Pole de recherche') {
                 $analyses = FormulaireAnalyse::paginate(10);
             } elseif($role->name == 'Directeur de laboratoire') {
                 $analyses = FormulaireAnalyse::where('laboratory_id', $user->laboratory_id)
