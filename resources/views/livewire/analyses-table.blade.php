@@ -41,7 +41,7 @@
                                 Validation de Centre d'analyse</th>
                         @endif
 
-                        @if (auth()->user()->hasRole('Centre d\'analyse|Etudiant|Admin'))
+                        @if (auth()->user()->hasRole('Centre d\'analyse|Etudiant|Pole de recherche'))
                             <th scope="col"
                                 class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                 Status de Centre d'analyse</th>
@@ -51,7 +51,7 @@
                                     Execution de analyse</th>
                             @endif
 
-                            @if (auth()->user()->hasRole('Centre d\'analyse|Etudiant|Admin'))
+                            @if (auth()->user()->hasRole('Centre d\'analyse|Etudiant|Pole de recherche'))
                                 <th scope="col"
                                     class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                     Status de execution de l'analyse</th>
@@ -63,7 +63,7 @@
                                     Validation de Directeur de Laboratoire</th>
                             @endif
 
-                            @if (auth()->user()->hasRole('Directeur de laboratoire|Etudiant|Admin'))
+                            @if (auth()->user()->hasRole('Directeur de laboratoire|Etudiant|Pole de recherche'))
                                 <th scope="col"
                                     class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                     Status de Directeur de Laboratoire</th>
@@ -75,7 +75,7 @@
                                     Validation de Enseignant</th>
                             @endif
 
-                            @if (auth()->user()->hasRole('Enseignant|Etudiant|Admin'))
+                            @if (auth()->user()->hasRole('Enseignant|Etudiant|Pole de recherche'))
                                 <th scope="col"
                                     class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                     Status de Enseignant</th>
@@ -84,7 +84,7 @@
                                 <th scope="col"
                                     class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                     Action</th>
-                          
+
                     </tr>
                 </thead>
                 <tbody>
@@ -129,7 +129,7 @@
                                         </form>
                                     </td>
                                 @endif
-                                @if (auth()->user()->hasRole('Etudiant|Centre d\'analyse|Admin'))
+                                @if (auth()->user()->hasRole('Etudiant|Centre d\'analyse|Pole de recherche'))
                                     <td
                                         class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
 
@@ -157,7 +157,7 @@
                                             </form>
                                         </td>
                                     @endif
-                                    @if (auth()->user()->hasRole('Etudiant|Centre d\'analyse|Admin'))
+                                    @if (auth()->user()->hasRole('Etudiant|Centre d\'analyse|Pole de recherche'))
                                         <td
                                             class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
 
@@ -190,7 +190,7 @@
                                             </form>
                                         </td>
                                     @endif
-                                    @if (auth()->user()->hasRole('Etudiant|Directeur de laboratoire|Admin'))
+                                    @if (auth()->user()->hasRole('Etudiant|Directeur de laboratoire|Pole de recherche'))
                                         <td
                                             class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
 
@@ -221,7 +221,7 @@
                                             </form>
                                         </td>
                                     @endif
-                                    @if (auth()->user()->hasRole('Etudiant|Enseignant|Admin'))
+                                    @if (auth()->user()->hasRole('Etudiant|Enseignant|Pole de recherche'))
                                         <td
                                             class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
 
@@ -271,10 +271,11 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="m-4">
+                {{ $analyses->links() }}
+            </div>
         </div>
 
     </div>
-    <div class="m-4">
-        {{ $analyses->links() }}
-    </div>
+
 </div>

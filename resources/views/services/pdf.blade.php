@@ -12,7 +12,7 @@
             padding: 0;
         }
         .container {
-            max-width: 1024px;
+            max-width: 2024px;
             margin: 0 auto;
             padding: 24px;
         }
@@ -30,15 +30,7 @@
             font-weight: bold;
             margin-bottom: 24px;
         }
-        .images {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-        .images img {
-            width: 48%;
-            border-radius: 8px;
-        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -71,19 +63,27 @@
             text-align: center;
             font-size: 0.9rem;
             padding: 12px;
-            border-top: 1px solid #e2e8f0;
+
             position: fixed;
-            left: 0;
+            border-top: 1px solid #e2e8f0;
+            right: -10px;
             bottom: 0;
             width: 100%;
         }
-        .logo-container {
-            display: flex;
-            justify-content: space-between;
-        }
 
-        .logo-container img {
-            width: 100px; /* adjust as needed */
+
+        .logo1 {
+            display:  inline-block;
+            text-align: right;
+            height: 100vh;
+        }
+        .logo2 {
+            display:  inline-block;
+            float: right;
+            height: 100vh;
+        }
+        .logo {
+            width: 180px; /* adjust as needed */
             height: auto;
         }
     </style>
@@ -91,8 +91,18 @@
 <body>
 
 <div class="container">
+
+        <div class="logo1" >
+
+            <img class="logo"  src="{{ public_path('assets/images/centreAppui.png') }}" alt="Centre d'appui" />
+
+
+        </div>
+<div class="logo2">
+    <img class="logo"  src="{{ public_path('assets/images/logoUni.png') }}" alt="Université" />
+</div>
     <div class="card">
-        <div class="title">ID : {{ $service->id }}</div>
+        <div class="title">Bon De Service Nº {{ $service->id }}</div>
 
         <table>
             <tr>
@@ -177,15 +187,15 @@
                     <div class="checkboxes">
                         <label>
                             <input type="checkbox" checked>
-                            Centre d'appui
+                            Centre d&#39;Appui à la Recherche Scientifique
                         </label>
                         <label>
                             <input type="checkbox" checked>
-                            Directeur
+                            Directeur de Laboratoire
                         </label>
                         <label>
                             <input type="checkbox" checked>
-                            Enseignant
+                            Encadrant
                         </label>
                     </div>
                 </td>
@@ -194,10 +204,12 @@
     </div>
 </div>
 <div class="footer">
-    Angle Allal Fassi / FAR, B.P. 8027, Hay Riad, 10000 Rabat, MAROC<br>
-    Tél.: +212 (0) 5 37 56 98 75 / 76 - Fax: +212 (0) 5 37 56 98 75<br>
-    E-mail: uatrs@cnrst.ma - Site web: www.cnrst.ma<br>
-    Compte CNRST: 310810100002470195700182 - Trésorerie Générale Rabat /// ICE n° 164 685 200 087 IF 40453159
+    Centre d&#39;Appui à la Recherche Scientifique, Université Ibn Tofail, Kénitra
+    Présidence - Université Ibn Tofail
+    Campus Universitaire B.P 242 -Kenitra<br>
+    Tél.: +212 (0) 5 37 32 92 00 <br>
+    E-mail: cars@uit.ac.ma - Site web: cars.uit.ac.ma<br>
+
 </div>
 </body>
 </html>

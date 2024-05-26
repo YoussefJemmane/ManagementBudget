@@ -9,18 +9,18 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    
+
 
     public function index()
     {
         $users = User::all();
-        
+
         return view('users.index', compact('users'));
     }
-    
+
     public function create()
     {
-        
+
         $roles = Role::all();
         // laboratories that are not assigned to any user that has the role 'Directeur de laboratoire'
         $laboratories = Laboratory::all();
@@ -28,19 +28,19 @@ class UserController extends Controller
         return view('users.create', compact('roles', 'laboratories', 'users'));
     }
 
-    
+
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users|ends_with:uit.ac.ma',
             'password' => 'required|string|min:8',
-            'cin' => 'required|string|max:255', 
-            'phone' => 'required|string|max:255', 
-            'etablissement' => 'nullable|string', 
-            'cne' => 'nullable|string|max:255', 
-            'date_inscription' => 'nullable|date', 
-            'entreprise' => 'nullable|string|max:255', 
+            'cin' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'etablissement' => 'nullable|string',
+            'cne' => 'nullable|string|max:255',
+            'date_inscription' => 'nullable|date',
+            'entreprise' => 'nullable|string|max:255',
             'laboratory_id' => 'nullable|exists:laboratories,id',
             'role' => 'required|string',
             'enseignant' => 'nullable|string|max:255',
@@ -51,38 +51,38 @@ class UserController extends Controller
         if ($request->role == 1) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone'));
             $request->role = 'Admin';
-        } 
-        
+        }
+
         elseif ($request->role == 4) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone'));
             $request->role = 'Centre d\'analyse';
         }
-        
+
         elseif ($request->role == 3) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone'));
             $request->role = 'Pole de recherche';
         }
-        
+
         elseif ($request->role == 2) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone'));
             $request->role = 'Centre d\'appui';
         }
-        
+
         elseif ($request->role == 5) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'cne', 'date_inscription', 'laboratory_id','enseignant'));
             $request->role = 'Etudiant';
         }
-        
+
         elseif ($request->role == 6) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'laboratory_id'));
             $request->role = 'Enseignant';
         }
-        
+
         elseif ($request->role == 7) {
             $user = User::create($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'laboratory_id'));
             $request->role = 'Directeur de laboratoire';
         }
-        
+
 
         $role = Role::where('name', $request->role)->first();
         if ($role) {
@@ -99,7 +99,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $roles = Role::all();      
+        $roles = Role::all();
         $laboratories = Laboratory::all();
         $users = User::all();
         return view('users.edit', compact('user', 'roles', 'laboratories', 'users'));
@@ -111,17 +111,17 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|ends_with:uit.ac.ma',
             'password' => 'required|string|min:8',
-            'cin' => 'required|string|max:255', 
-            'phone' => 'required|string|max:255', 
-            'etablissement' => 'nullable|string', 
-            'cne' => 'nullable|string|max:255', 
-            'date_inscription' => 'nullable|date', 
-            'entreprise' => 'nullable|string|max:255', 
+            'cin' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'etablissement' => 'nullable|string',
+            'cne' => 'nullable|string|max:255',
+            'date_inscription' => 'nullable|date',
+            'entreprise' => 'nullable|string|max:255',
             'laboratory_id' => 'nullable|exists:laboratories,id',
             'role' => 'required|string',
             'enseignant' => 'nullable|string|max:255',
         ]);
-        
+
         if ($request->role == 1) {
             $user->update($request->only('name', 'email', 'password', 'cin', 'phone'));
             $request->role = 'Admin';
@@ -143,7 +143,7 @@ class UserController extends Controller
         } elseif ($request->role == 7) {
             $user->update($request->only('name', 'email', 'password', 'cin', 'phone', 'etablissement', 'laboratory_id'));
             $request->role = 'Directeur de laboratoire';
-        } 
+        }
 
         $role = Role::where('name', $request->role)->first();
         if ($role) {
@@ -172,9 +172,9 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
-            'cin' => 'required|string|max:255', 
-            'phone' => 'required|string|max:255', 
-            'entreprise' => 'required|string|max:255', 
+            'cin' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'entreprise' => 'required|string|max:255',
             'role' => 'Entreprise',
         ]);
 
@@ -185,7 +185,7 @@ class UserController extends Controller
             $user->assignRole($role);
         }
 
-        return redirect()->route('users.index');
+        return redirect()->route('dashboard');
     }
 
     // export users to excel
@@ -205,7 +205,7 @@ class UserController extends Controller
         $path = $request->file('file')->store('excel-files');
         $users = (new FastExcel)->import(storage_path('app/' . $path));
         foreach ($users as $user) {
-            
+
 
             $useradd = new User();
             $useradd->name = $user['Name'];
@@ -231,9 +231,9 @@ class UserController extends Controller
             $useradd->save();
 
 
-            
+
         }
-        
+
         return redirect()->route('users.index');
     }
 
