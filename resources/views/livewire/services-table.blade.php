@@ -41,6 +41,22 @@
             </div>
         </div>
     </div>
+    {{-- errors --}}
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Holy smokes!</strong>
+            <span class="block sm:inline">{{ $errors->first() }}</span>
+            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20">
+                    <title>Close</title>
+                    <path
+                        d="M14.348 5.652a.5.5 0 0 1 0 .707l-8 8a.5.5 0 0 1-.707 0l-8-8a.5.5 0 0 1 .707-.707L10 13.293l7.646-7.647a.5.5 0 0 1 .707 0z" />
+                </svg>
+            </span>
+
+        </div>
+    @endif
     <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border border-collapse rounded sm:border-separate border-slate-200"
@@ -148,6 +164,7 @@
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+                                            {{ $service->validation_enseignant === "validate" ? 'disabled' : '' }}
                                         >Validate</button>
                                     </form>
                                     <form action="{{ route('services.novalidationenseignant', $service->id) }}" method="POST">
@@ -155,6 +172,7 @@
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+                                            {{ $service->validation_enseignant === "non validate" ? 'disabled' : '' }}
                                         >Refuse</button>
                                     </form>
                                 </td>
@@ -174,6 +192,7 @@
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+                                            {{ $service->validation_directeur_labo === "validate" ? 'disabled' : '' }}
                                         >Validate</button>
                                     </form>
                                     <form action="{{ route('services.novalidationdirecteurlabo', $service->id) }}"
@@ -182,6 +201,7 @@
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+                                            {{ $service->validation_directeur_labo === "non validate" ? 'disabled' : '' }}
                                         >Refuse</button>
                                     </form>
                                 </td>
@@ -202,7 +222,9 @@
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
                                             {{ $service->frais_service ? '' : 'disabled' }}
+                                            {{ $service->validation_centre_appui === "validate" ? 'disabled' : '' }}
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+
                                         >Validate</button>
                                     </form>
                                     <form action="{{ route('services.novalidationcentreappui', $service->id) }}" method="POST">
@@ -210,7 +232,10 @@
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
                                             {{ $service->frais_service ? '' : 'disabled' }}
+                                            {{ $service->validation_centre_appui === "non validate" ? 'disabled' : '' }}
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+
+
                                         >Refuse</button>
                                     </form>
                                 </td>
@@ -220,16 +245,19 @@
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
-                                            {{ $service->validation_centre_appui === "validate" ? '' : 'disabled' }}
+                                            {{ $service->validation_directeur_labo === "validate" && $service->validation_centre_appui === "validate" && $service->validation_enseignant === "validate" ? '' : 'disabled' }}
                                             {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+
                                         >Execute</button>
                                     </form>
                                     <form action="{{ route('services.pendingservice', $service->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
-                                            {{ $service->validation_centre_appui === "validate" ? '' : 'disabled' }}
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
+                                            {{ $service->validation_directeur_labo === "validate" && $service->validation_centre_appui === "validate" && $service->validation_enseignant === "validate" ? '' : 'disabled' }}
+                                            {{ $service->execution_service === "pending" ? 'disabled' : '' }}
+
+
                                         >Pending</button>
                                     </form>
                                 </td>

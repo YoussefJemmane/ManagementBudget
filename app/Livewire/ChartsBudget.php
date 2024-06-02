@@ -19,7 +19,7 @@ class ChartsBudget extends Component
         $depensesTraduction = $services->where('type_service', 'traduction')->where('execution_service', 'execute')->sum('frais_service');
         $depensesPublication = $services->where('type_service', 'publication')->where('execution_service', 'execute')->sum('frais_service');
         $depensesRevision = $services->where('type_service', 'revision')->where('execution_service', 'execute')->sum('frais_service');
-        $depensesAnalyses = $analyses->sum('prix_total');
+        $depensesAnalyses = $analyses->where('execution_analyse', 'execute')->sum('prix_total');
         return view('livewire.charts-budget', compact('budgetReste', 'budgetUsed', 'first_budget', 'depensesTraduction', 'depensesPublication', 'depensesRevision', 'depensesAnalyses'));
     }
 }

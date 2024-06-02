@@ -14,7 +14,6 @@ class Laboratory extends Model
         'budget',
         'first_budget'
     ];
-    // a user that have a role of 'Dirceteur de laboratoire' can be assigned to a laboratory
     public function users()
     {
         return $this->hasMany(User::class, 'laboratory_id');
@@ -23,7 +22,6 @@ class Laboratory extends Model
     public function students()
     {
         return $this->hasMany(User::class, 'laboratory_id')
-//            i want to add a condition that the user role is 'Etudiant' the role is from Spatie package hasRoles
             ->whereHas('roles', function ($query) {
                 $query->where('name', 'Etudiant');
             });
@@ -39,6 +37,7 @@ class Laboratory extends Model
         return $this->hasMany(FormulaireAnalyse::class, 'laboratory_id');
     }
 
+   
 
 
 }

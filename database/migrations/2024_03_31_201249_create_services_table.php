@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string("frais_service")->nullable();
             $table->text("article")->nullable();
             $table->text("lettre_acceptation")->nullable();
+            $table->text("devis_journal")->nullable();
             $table->foreignId("laboratory_id")->constrained("laboratories")->cascadeOnDelete();
             $table->enum("execution_service", ["pending", "execute","non excecute"])->default("non excecute");
             $table->enum("validation_centre_appui", ["pending", "validate","non validate"])->default("pending");

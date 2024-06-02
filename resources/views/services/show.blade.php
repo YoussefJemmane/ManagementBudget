@@ -24,16 +24,12 @@
                                 @php
                                     $user = $service->user;
                                     $roles = $user->roles;
-                                    $nameParts = explode(" ", $user->name);
                                 @endphp
                                     @foreach ($roles as $role)
                                         @if ($role->name == 'Etudiant')
-                                        @if (!empty($nameParts[1]))
-                                            <p>Nom : {{ $nameParts[0] }}</p>
-                                            <p>Prenom : {{ $nameParts[1] }}</p>
-                                        @else
-                                            <p>{{ $user->name }}</p>
-                                        @endif
+
+                                            <p>Nom Complet : {{ $user->name }}</p>
+
                                         @endif
 
                                     @endforeach
@@ -73,19 +69,25 @@
                                 {{ $service->validation_enseignant }}
                             </div>
                         </div>
+
                         <div class="flex">
-                            <div class="w-1/2">
-                                <p class="font-bold">Article :</p>
-                                <a href="{{ route('services.articlePDF', ['service' => $service->id]) }}">Telecharger</a>
-                            </div>
+
                             @if($service->lettre_acceptation)
                                 <div class="w-1/2">
                                     <p class="font-bold">Lettre d'acceptation :</p>
                                     <a href="{{ route('services.lettreacceptationPDF', ['service' => $service->id]) }}">Telecharger</a>
                                 </div>
+                                {{-- devis_journal --}}
+                                <div class="w-1/2">
+                                    <p class="font-bold">Devis Journal :</p>
+                                    <a href="{{ route('services.devisjournalPDF', ['service' => $service->id]) }}">Telecharger</a>
+                                </div>
                             @endif
                         </div>
-
+                        <div class="w-1/2">
+                            <p class="font-bold">Article :</p>
+                            <a href="{{ route('services.articlePDF', ['service' => $service->id]) }}">Telecharger</a>
+                        </div>
                         <div class="flex mt-4">
                             <div class="w-1/2">
                                 <p class="font-bold">Créé le:</p>

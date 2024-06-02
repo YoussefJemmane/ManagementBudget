@@ -370,7 +370,9 @@ class FormulaireAnalyseController extends Controller
         $formulaireanalyse->update([
             "validation_directeur_labo" => "non validate",
         ]);
+        $user = $formulaireanalyse->user;
 
+        $user->notify(new AnalyseRefuser());
         $centreAnalyse = User::Role('Centre d\'analyse')->first();
 
         if ($centreAnalyse) {
@@ -397,8 +399,13 @@ class FormulaireAnalyseController extends Controller
         $formulaireanalyse->update([
             "validation_enseignant" => "non validate",
         ]);
+        $user = $formulaireanalyse->user;
 
-        $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
+        $user->notify(new AnalyseRefuser());
+        $laboratory = $user->laboratory;
+
+        $directeur = User::where('laboratory_id', $laboratory->id)->Role('Directeur de laboratoire')->first();
+
 
         if ($directeur) {
             $directeur->notify(new AnalyseRefuser());

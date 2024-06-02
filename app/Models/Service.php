@@ -22,6 +22,7 @@ class Service extends Model
         "laboratory_id",
         "article",
         "lettre_acceptation",
+        "devis_journal",
         'execution_service',
         "validation_centre_appui",
         "validation_directeur_labo",

@@ -20,6 +20,7 @@
             class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">Add
             Laboratory</a>
     </div>
+    
     <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border border-collapse rounded sm:border-separate border-slate-200"
