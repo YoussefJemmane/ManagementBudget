@@ -111,16 +111,12 @@
                     @php
                         $user = $service->user;
                         $roles = $user->roles;
-                        $nameParts = explode(" ", $user->name);
                     @endphp
                     @foreach ($roles as $role)
                         @if ($role->name == 'Etudiant')
-                            @if (!empty($nameParts[1]))
-                                Nom : {{ $nameParts[0] }}<br>
-                                Prenom : {{ $nameParts[1] }}
-                            @else
-                                <p>{{ $user->name }}</p>
-                            @endif
+
+                                <p>Nom Complet : {{ $user->name }}</p>
+
                         @endif
                     @endforeach
                 </td>

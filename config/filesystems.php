@@ -47,6 +47,12 @@ return [
             'url' => env('APP_URL').'/storage/services/lettre_acceptations',
             'visibility' => 'public',
         ],
+        'public/services/devis_journals' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/services/devis_journals'),
+            'url' => env('APP_URL').'/storage/services/devis_journals',
+            'visibility' => 'public',
+        ],
 
         'public' => [
             'driver' => 'local',

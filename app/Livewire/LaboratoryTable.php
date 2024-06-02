@@ -14,10 +14,13 @@ class LaboratoryTable extends Component
 
     protected $queryString = ['search'];
 
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
+
+
 
     public function render()
     {

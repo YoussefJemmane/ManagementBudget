@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger("first_budget");
             $table->timestamps();
         });
+
     }
 
     /**

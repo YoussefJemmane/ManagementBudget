@@ -10,7 +10,7 @@ use App\Notifications\ServiceStored;
 use App\Notifications\ServiceValidated;
 use App\Notifications\ServiceExecuted;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
@@ -42,8 +42,9 @@ class ServiceController extends Controller
             'titre' => 'required',
             'intitule_article' => 'nullable',
             'intitule_journal' => 'nullable',
-            'article' => 'nullable|file|mimes:pdf|max:5120',
+            'article' => 'nullable|file|mimes:doc,docx|max:6024',
             'lettre_acceptation' => 'nullable|file|mimes:pdf|max:2024',
+            'devis_journal' => 'nullable|file|mimes:pdf|max:2024',
             'ISSN' => 'nullable',
             'base_donne_indexation' => 'nullable',
             'qualite_article' => 'nullable',
@@ -51,6 +52,7 @@ class ServiceController extends Controller
             'validation_centre_appui' => 'nullable',
             'validation_directeur_labo' => 'nullable',
             'validation_enseignant' => 'nullable',
+
         ]);
 
         $status = auth()->user()->role === 'Enseignant' ? 'enseignant' : 'doctorant';
@@ -59,6 +61,9 @@ class ServiceController extends Controller
         $article = $request->file('article')->store('public/services/articles');
         $lettre_acceptation = $request->hasFile('lettre_acceptation')
             ? $request->file('lettre_acceptation')->store('public/services/lettre_acceptations')
+            : null;
+        $devis_journal = $request->hasFile('devis_journal')
+            ? $request->file('devis_journal')->store('public/services/devis_journals')
             : null;
         $service = Service::create([
             'user_id' => auth()->id(),
@@ -74,6 +79,7 @@ class ServiceController extends Controller
             'laboratory_id' => auth()->user()->laboratory_id,
             'article' => $article,
             'lettre_acceptation' => $lettre_acceptation,
+            'devis_journal' => $devis_journal,
             'validation_centre_appui' => 'pending',
             'validation_directeur_labo' => 'pending',
             'validation_enseignant' => 'pending',
@@ -124,6 +130,7 @@ class ServiceController extends Controller
             'validation_enseignant' => 'nullable',
             'article' => 'nullable',
             'lettre_acceptation' => 'nullable',
+            'devis_journal' => 'nullable',
         ]);
         // if auth user is Enseignant then status is enseignant else doctorant
         $status = auth()->user()->role === 'Enseignant' ? 'enseignant' : 'doctorant';
@@ -132,6 +139,9 @@ class ServiceController extends Controller
         $article = $request->file('article')->store('public/services/articles');
         $lettre_acceptation = $request->hasFile('lettre_acceptation')
             ? $request->file('lettre_acceptation')->store('public/services/lettre_acceptations')
+            : null;
+        $devis_journal = $request->hasFile('devis_journal')
+            ? $request->file('devis_journal')->store('public/services/devis_journals')
             : null;
         $service->update([
 
@@ -147,6 +157,7 @@ class ServiceController extends Controller
             'laboratory_id' => auth()->user()->laboratory_id,
             'article' => $article,
             'lettre_acceptation' => $lettre_acceptation,
+            'devis_journal' => $devis_journal,
             'validation_centre_appui' => 'pending',
             'validation_directeur_labo' => 'pending',
             'validation_enseignant' => 'pending',
@@ -161,7 +172,13 @@ class ServiceController extends Controller
 
         $service->update([
             'frais_service' => request('frais_service'),
+            'validation_directeur_labo' => 'pending',
+            'validation_enseignant' => 'pending',
         ]);
+
+        // notify the directeur and the enseignant that the service has been updated
+        $directeur = User::where('laboratory_id', auth()->user()->laboratory_id)->Role('Directeur de laboratoire')->first();
+        $enseignant = User::Role('Enseignant')->first();
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
@@ -179,9 +196,11 @@ class ServiceController extends Controller
     // Validation de Centre d'appui
     public function validationcentreappui(Service $service)
     {
-        $enseignant = User::Role('Enseignant')->first();
 
-        // If the centre d'appui exists, send the notification
+        $user = $service->user;
+        $enseignantName = $user->enseignant;
+
+        $enseignant = User::where('name', $enseignantName)->first();
         if ($enseignant) {
             $enseignant->notify(new ServiceValidated());
         }
@@ -228,8 +247,23 @@ class ServiceController extends Controller
     }
 
     // Execution de service
-    public function executiondeservice(Service $service)
+    public function executiondeservice(Request $request,Service $service)
     {
+        if ($service->laboratory->budget < $service->frais_service) {
+            $newBudget = $service->laboratory->budget - $service->frais_service;
+
+            $validator = Validator::make(['budget' => $newBudget], [
+                'budget' => 'gte:0',
+            ], [
+                'budget.min' => 'The laboratory does not have enough budget to execute this service.',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+        }
+        if ($service->laboratory->budget >= $service->frais_service) {
+
         $service->update([
             'execution_service' => 'execute',
         ]);
@@ -243,6 +277,7 @@ class ServiceController extends Controller
         $service->user->notify(new ServiceExecuted());
 
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');
+    }
     }
 
     // Non Execution de service
@@ -333,6 +368,11 @@ class ServiceController extends Controller
     {
         $file = Storage::disk('public/services/lettre_acceptations')->get($service->lettre_acceptation);
         return response()->download(storage_path('app/' . $service->lettre_acceptation));
+    }
+    public function downloadDevisJournal(Service $service)
+    {
+        $file = Storage::disk('public/services/devis_journals')->get($service->devis_journal);
+        return response()->download(storage_path('app/' . $service->devis_journal));
     }
 
     public function generatepdf(Service $service)

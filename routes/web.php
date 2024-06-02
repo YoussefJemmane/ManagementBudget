@@ -126,6 +126,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/lettreacceptatiom/{service}', [ServiceController::class, 'downloadLettreAcceptation'])->name('services.lettreacceptationPDF');
         Route::get('/article/{service}', [ServiceController::class, 'downloadArticle'])->name('services.articlePDF');
+        Route::get('/devisjournal/{service}', [ServiceController::class, 'downloadDevisJournal'])->name('services.devisjournalPDF');
     });
 
 });

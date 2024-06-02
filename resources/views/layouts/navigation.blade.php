@@ -36,7 +36,7 @@
                         </x-nav-link>
                     @endif
 
-                    @if (auth()->user()->hasRole('Centre d\'analyse|Pole de recherche'))
+                    @if (auth()->user()->hasRole('Centre d\'analyse'))
                         <x-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
                             {{ __('Formations') }}
                         </x-nav-link>
@@ -44,7 +44,10 @@
                             {{ __('Centre d\'Analyses') }}
                         </x-nav-link>
                     @endif
-                    @if (auth()->user()->hasRole('Centre d\'appui|Pole de recherche'))
+                    @if (auth()->user()->hasRole('Centre d\'appui'))
+                    <x-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
+                        {{ __('Formations') }}
+                    </x-nav-link>
                         <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                             {{ __('Centre d\'appui') }}
                         </x-nav-link>

@@ -35,7 +35,7 @@
                         <th scope="col"
                             class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                             Prix Total</th>
-                        @if (auth()->user()->hasRole('Centre d\'analyse') )
+                        @if (auth()->user()->hasRole('Centre d\'analyse'))
                             <th scope="col"
                                 class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                 Validation de Centre d'analyse</th>
@@ -45,45 +45,45 @@
                             <th scope="col"
                                 class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
                                 Status de Centre d'analyse</th>
-                            @endif @if (auth()->user()->hasRole('Centre d\'analyse'))
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Execution de analyse</th>
-                            @endif
+                        @endif
 
-                            @if (auth()->user()->hasRole('Centre d\'analyse|Etudiant|Pole de recherche'))
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Status de execution de l'analyse</th>
-                            @endif
+                        @if (auth()->user()->hasRole('Directeur de laboratoire'))
+                            <th scope="col"
+                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                Validation de Directeur de Laboratoire</th>
+                        @endif
 
-                            @if (auth()->user()->hasRole('Directeur de laboratoire'))
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Validation de Directeur de Laboratoire</th>
-                            @endif
+                        @if (auth()->user()->hasRole('Directeur de laboratoire|Etudiant|Pole de recherche'))
+                            <th scope="col"
+                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                Status de Directeur de Laboratoire</th>
+                        @endif
 
-                            @if (auth()->user()->hasRole('Directeur de laboratoire|Etudiant|Pole de recherche'))
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Status de Directeur de Laboratoire</th>
-                            @endif
+                        @if (auth()->user()->hasRole('Enseignant'))
+                            <th scope="col"
+                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                Validation de Enseignant</th>
+                        @endif
 
-                            @if (auth()->user()->hasRole('Enseignant'))
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Validation de Enseignant</th>
-                            @endif
+                        @if (auth()->user()->hasRole('Enseignant|Etudiant|Pole de recherche'))
+                            <th scope="col"
+                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                Status de Enseignant</th>
+                        @endif
+                        @if (auth()->user()->hasRole('Centre d\'analyse'))
+                            <th scope="col"
+                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                Execution de analyse</th>
+                        @endif
 
-                            @if (auth()->user()->hasRole('Enseignant|Etudiant|Pole de recherche'))
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Status de Enseignant</th>
-                            @endif
-
-                                <th scope="col"
-                                    class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                    Action</th>
+                        @if (auth()->user()->hasRole('Centre d\'analyse|Etudiant|Pole de recherche'))
+                            <th scope="col"
+                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                                Status de execution de l'analyse</th>
+                        @endif
+                        <th scope="col"
+                            class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                            Action</th>
 
                     </tr>
                 </thead>
@@ -110,7 +110,7 @@
                                 <td
                                     class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
                                     {{ $analyse->prix_total }}</td>
-                                @if (auth()->user()->hasRole('Centre d\'analyse') )
+                                @if (auth()->user()->hasRole('Centre d\'analyse'))
                                     <td
                                         class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
                                         <form
@@ -118,14 +118,19 @@
                                             method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <button type="submit" class="text-blue-600 "@if (($analyse->execution_analyse === 'execute')) disabled @endif>Validate</button>
+                                            <button type="submit"
+                                                class="text-blue-600 "@if ($analyse->execution_analyse === 'execute' || $analyse->validation_centre_analyse === 'validate') disabled @endif>
+                                                Validate
+                                            </button>
                                         </form>
                                         <form
                                             action="{{ route('formulaireanalysenovalidationcentreanalyse.update', $analyse->id) }}"
                                             method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <button type="submit" class="text-red-600 "@if (($analyse->execution_analyse === 'execute')) disabled @endif>No Validate</button>
+                                            <button type="submit"
+                                                class="text-red-600 "@if ($analyse->execution_analyse === 'execute' || $analyse->validation_centre_analyse === 'non validate') disabled @endif>No
+                                                Validate</button>
                                         </form>
                                     </td>
                                 @endif
@@ -136,133 +141,141 @@
 
                                         {{ $analyse->validation_centre_analyse }}
                                     </td>
-                                    @endif @if (auth()->user()->hasRole('Centre d\'analyse'))
+                                @endif
+                                @if (auth()->user()->hasRole('Directeur de laboratoire'))
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+
+                                        <form
+                                            action="{{ route('formulaireanalysevalidationdirecteurlabo.update', $analyse->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="text-blue-600 "
+                                                @if ($analyse->execution_analyse === 'execute' || $analyse->validation_directeur_labo === 'validate') disabled @endif>
+                                                Validate
+                                            </button>
+                                        </form>
+                                        <form
+                                            action="{{ route('formulaireanalysenovalidationdirecteurlabo.update', $analyse->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                class="text-red-600 "@if ($analyse->execution_analyse === 'execute' || $analyse->validation_directeur_labo === 'non validate') disabled @endif>
+                                                No Validate
+                                            </button>
+                                        </form>
+                                    </td>
+                                @endif
+                                @if (auth()->user()->hasRole('Etudiant|Directeur de laboratoire|Pole de recherche'))
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+
+                                        {{ $analyse->validation_directeur_labo }}
+                                    </td>
+                                @endif
+                                @if (auth()->user()->hasRole('Enseignant'))
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+
+                                        <form
+                                            action="{{ route('formulaireanalysevalidationenseignant.update', $analyse->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                class="text-blue-600 "@if ($analyse->execution_analyse === 'execute' || $analyse->validation_enseignant === 'validate') disabled @endif>
+                                                Validate
+                                            </button>
+                                        </form>
+                                        <form
+                                            action="{{ route('formulaireanalysenovalidationenseignant.update', $analyse->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="text-red-600 "
+                                                @if ($analyse->execution_analyse === 'execute' || $analyse->validation_enseignant === 'non validate') disabled @endif>
+                                                No Validate
+                                            </button>
+                                        </form>
+                                    </td>
+                                @endif
+                                @if (auth()->user()->hasRole('Etudiant|Enseignant|Pole de recherche'))
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+
+
+                                        {{ $analyse->validation_enseignant }}
+
+                                    </td>
+                                @endif
+                                @if (auth()->user()->hasRole('Centre d\'analyse'))
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+                                        <form
+                                            action="{{ route('formulaireanalyseexecutioncentreanalyse.update', $analyse->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="text-blue-600 "
+                                                @if ($analyse->execution_analyse === 'execute' || $analyse->validation_centre_analyse === 'non validate' || $analyse->validation_directeur_labo === 'non validate' || $analyse->validation_enseignant === 'non validate' || $analyse->validation_centre_analyse === 'pending' || $analyse->validation_directeur_labo === 'pending' || $analyse->validation_enseignant === 'pending') disabled @endif> Execute </button>
+                                        </form>
+                                        <form
+                                            action="{{ route('formulaireanalysependingexecutionanalyse.update', $analyse->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="text-red-600 "
+                                                @if ($analyse->execution_analyse === 'pending' || $analyse->validation_centre_analyse === 'non validate' || $analyse->validation_directeur_labo === 'non validate' || $analyse->validation_enseignant === 'non validate' || $analyse->validation_centre_analyse === 'pending' || $analyse->validation_directeur_labo === 'pending' || $analyse->validation_enseignant === 'pending') disabled @endif>Pending</button>
+                                        </form>
+
+                                    </td>
+                                @endif
+                                @if (auth()->user()->hasRole('Etudiant|Centre d\'analyse|Pole de recherche'))
+                                    <td
+                                        class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
+
+
+                                        {{ $analyse->execution_analyse }}
+                                    </td>
+                                @endif
+                                @if (auth()->user()->hasRole('Etudiant'))
+                                    @if ($analyse->execution_analyse === 'execute')
+                                        {{--                                            return a button download have route analyse.generatepdf --}}
                                         <td
-                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-                                            <form
-                                                action="{{ route('formulaireanalysependingexecutionanalyse.update', $analyse->id) }}"
-                                                method="POST">
+                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+                                            <a href="{{ route('formulaireanalyse.generatepdf', $analyse->id) }}"
+                                                class="text-green-600 ">Download</a>
+                                        </td>
+                                    @else
+                                        <td
+                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+                                            <a href="{{ route('formulaireanalyse.edit', $analyse->id) }}"
+                                                class="text-indigo-600 "
+                                                @if ($analyse->execution_analyse === 'execute') disabled @endif>
+                                                Edit</a>
+                                            <a href="{{ route('formulaireanalyse.show', $analyse->id) }}"
+                                                class="text-yellow-600 "
+                                                @if ($analyse->execution_analyse === 'execute') disabled @endif> Show</a>
+                                            <form action="{{ route('formulaireanalyse.destroy', $analyse->id) }}"
+                                                method="POST" class="inline-block">
                                                 @csrf
-                                                @method('PUT')
+                                                @method('DELETE')
+                                                {{-- a button without borders just Delete text in red --}}
                                                 <button type="submit" class="text-red-600 "
-                                                    @if (($analyse->execution_analyse === 'execute' || $analyse->execution_analyse === 'pending')) disabled @endif>Pending</button>
-                                            </form>
-                                            <form
-                                                action="{{ route('formulaireanalyseexecutioncentreanalyse.update', $analyse->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="text-blue-600 "
-                                                    @if (($analyse->execution_analyse === 'execute')) disabled @endif>Execute</button>
+                                                    @if ($analyse->execution_analyse === 'execute') disabled @endif>Delete</button>
                                             </form>
                                         </td>
                                     @endif
-                                    @if (auth()->user()->hasRole('Etudiant|Centre d\'analyse|Pole de recherche'))
-                                        <td
-                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-
-
-                                            {{ $analyse->execution_analyse }}
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->hasRole('Directeur de laboratoire'))
-                                        <td
-                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-
-                                            <form
-                                                action="{{ route('formulaireanalysevalidationdirecteurlabo.update', $analyse->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="text-blue-600 "
-                                                    @if (($analyse->execution_analyse === 'execute')) disabled @endif>
-                                                    Validate
-                                                </button>
-                                            </form>
-                                            <form
-                                                action="{{ route('formulaireanalysenovalidationdirecteurlabo.update', $analyse->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="text-red-600 "@if ($analyse->execution_analyse === 'execute') disabled @endif>
-                                                    No Validate
-                                                </button>
-                                            </form>
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->hasRole('Etudiant|Directeur de laboratoire|Pole de recherche'))
-                                        <td
-                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-
-                                            {{ $analyse->validation_directeur_labo }}
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->hasRole('Enseignant') )
-                                        <td
-                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-
-                                            <form
-                                                action="{{ route('formulaireanalysevalidationenseignant.update', $analyse->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="text-blue-600 "@if (($analyse->execution_analyse === 'execute')) disabled @endif>
-                                                    Validate
-                                                </button>
-                                            </form>
-                                            <form
-                                                action="{{ route('formulaireanalysenovalidationenseignant.update', $analyse->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="text-red-600 " @if (($analyse->execution_analyse === 'execute')) disabled @endif>
-                                                    No Validate
-                                                </button>
-                                            </form>
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->hasRole('Etudiant|Enseignant|Pole de recherche'))
-                                        <td
-                                            class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-
-
-                                            {{ $analyse->validation_enseignant }}
-
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->hasRole('Etudiant') )
-                                        @if($analyse->execution_analyse === "execute")
-{{--                                            return a button download have route analyse.generatepdf--}}
-                                            <td
-                                                class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
-                                                <a href="{{ route('formulaireanalyse.generatepdf', $analyse->id) }}"
-                                                   class="text-green-600 ">Download</a>
-                                            </td>
-
-                                        @else
-                                                <td
-                                                    class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
-                                                    <a href="{{ route('formulaireanalyse.edit', $analyse->id) }}"
-                                                       class="text-indigo-600 " @if (($analyse->execution_analyse === 'execute')) disabled @endif>
-                                                        Edit</a>
-                                                    <a href="{{ route('formulaireanalyse.show', $analyse->id) }}"
-                                                       class="text-yellow-600 " @if (($analyse->execution_analyse === 'execute')) disabled @endif> Show</a>
-                                                    <form action="{{ route('formulaireanalyse.destroy', $analyse->id) }}"
-                                                          method="POST" class="inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        {{-- a button without borders just Delete text in red --}}
-                                                        <button type="submit" class="text-red-600 " @if (($analyse->execution_analyse === 'execute')) disabled @endif>Delete</button>
-                                                    </form>
-                                                </td>
-                                        @endif
-
                                 @else
                                     <td
                                         class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
 
                                         <a href="{{ route('formulaireanalyse.show', $analyse->id) }}"
-                                           class="text-yellow-600 " @if (($analyse->execution_analyse === 'execute')) disabled @endif> Show</a>
+                                            class="text-yellow-600 "
+                                            @if ($analyse->execution_analyse === 'execute') disabled @endif>
+                                            Show</a>
 
                                     </td>
                                 @endif
