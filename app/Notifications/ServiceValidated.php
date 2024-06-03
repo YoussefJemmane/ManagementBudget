@@ -35,9 +35,9 @@ class ServiceValidated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->line('A new service has been updated.')
-        ->action('View Services', url('/services'))
-        ->line('Thank you for using our application!');
+        ->line('Une nouvelle service a été mise à jour.')
+        ->action('Pour consulter vos services, cliquez sur le bouton ci-dessous.', url('/services'))
+        ->line('Merci d\'utiliser notre application !');
     }
 
     /**

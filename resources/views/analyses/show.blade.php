@@ -24,18 +24,12 @@
                                 @php
                                     $user = $formulaireanalyse->user;
                                     $roles = $user->roles;
-                                    $nameParts = explode(" ", $user->name);
                                 @endphp
 
                                     @foreach ($roles as $role)
                                         @if ($role->name == 'Etudiant')
-                                            {{--                                        must part the nom and prenom by " " from {{ $user->name }}--}}
-                                        @if (!empty($nameParts[1]))
-                                            <p>Nom : {{ $nameParts[0] }}</p>
-                                            <p>Prenom : {{ $nameParts[1] }}</p>
-                                        @else
+
                                             <p>{{ $user->name }}</p>
-                                        @endif
                                         @endif
 
                                     @endforeach

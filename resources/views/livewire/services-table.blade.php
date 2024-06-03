@@ -5,6 +5,10 @@
                 class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">Add
                 Service</a>
         @endif
+        @if (!auth()->user()->hasRole('Etudiant|Pole de recherche|Enseignant'))
+        <a href="{{ route('services.export') }}"
+        class="px-4 py-2 ml-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">Export Data</a>
+        @endif
     </div>
     <div id="frais-modal" tabindex="-1" aria-hidden="true" x-show="showModal"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -115,9 +119,9 @@
                                 Status Execution de Service</th>
                         @endif
 
-                            <th scope="col"
-                                class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
-                                Action</th>
+                        <th scope="col"
+                            class="h-12 px-6 text-sm font-medium border-l first:border-l-0 stroke-slate-700 text-slate-700 bg-slate-100">
+                            Action</th>
 
                     </tr>
                     @foreach ($services as $service)
@@ -145,10 +149,11 @@
                                 @if ($service->frais_service)
                                     {{ $service->frais_service }}
                                 @else
-                                    @if(auth()->user()->hasRole('Centre d\'appui'))
-                                    <button data-modal-target="frais-modal" data-modal-toggle="frais-modal"
-                                        @click="showModal = true; serviceId = {{ $service->id }}"
-                                        data-service-id="{{ $service->id }}" class="text-blue-600">Pas encore</button>
+                                    @if (auth()->user()->hasRole('Centre d\'appui'))
+                                        <button data-modal-target="frais-modal" data-modal-toggle="frais-modal"
+                                            @click="showModal = true; serviceId = {{ $service->id }}"
+                                            data-service-id="{{ $service->id }}" class="text-blue-600">Pas
+                                            encore</button>
                                     @else
                                         Pas encore
                                     @endif
@@ -163,21 +168,20 @@
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-                                            {{ $service->validation_enseignant === "validate" ? 'disabled' : '' }}
-                                        >Validate</button>
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}
+                                            {{ $service->validation_enseignant === 'validate' ? 'disabled' : '' }}>Validate</button>
                                     </form>
-                                    <form action="{{ route('services.novalidationenseignant', $service->id) }}" method="POST">
+                                    <form action="{{ route('services.novalidationenseignant', $service->id) }}"
+                                        method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-                                            {{ $service->validation_enseignant === "non validate" ? 'disabled' : '' }}
-                                        >Refuse</button>
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}
+                                            {{ $service->validation_enseignant === 'non validate' ? 'disabled' : '' }}>Refuse</button>
                                     </form>
                                 </td>
                             @endif
-                            @if(auth()->user()->hasRole('Enseignant|Etudiant|Pole de recherche'))
+                            @if (auth()->user()->hasRole('Enseignant|Etudiant|Pole de recherche'))
                                 <td
                                     class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
                                     {{ $service->validation_enseignant }}
@@ -191,18 +195,16 @@
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-                                            {{ $service->validation_directeur_labo === "validate" ? 'disabled' : '' }}
-                                        >Validate</button>
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}
+                                            {{ $service->validation_directeur_labo === 'validate' ? 'disabled' : '' }}>Validate</button>
                                     </form>
                                     <form action="{{ route('services.novalidationdirecteurlabo', $service->id) }}"
                                         method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-                                            {{ $service->validation_directeur_labo === "non validate" ? 'disabled' : '' }}
-                                        >Refuse</button>
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}
+                                            {{ $service->validation_directeur_labo === 'non validate' ? 'disabled' : '' }}>Refuse</button>
                                     </form>
                                 </td>
                             @endif
@@ -222,43 +224,36 @@
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
                                             {{ $service->frais_service ? '' : 'disabled' }}
-                                            {{ $service->validation_centre_appui === "validate" ? 'disabled' : '' }}
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-
-                                        >Validate</button>
+                                            {{ $service->validation_centre_appui === 'validate' ? 'disabled' : '' }}
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}>Validate</button>
                                     </form>
-                                    <form action="{{ route('services.novalidationcentreappui', $service->id) }}" method="POST">
+                                    <form action="{{ route('services.novalidationcentreappui', $service->id) }}"
+                                        method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
                                             {{ $service->frais_service ? '' : 'disabled' }}
-                                            {{ $service->validation_centre_appui === "non validate" ? 'disabled' : '' }}
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-
-
-                                        >Refuse</button>
+                                            {{ $service->validation_centre_appui === 'non validate' ? 'disabled' : '' }}
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}>Refuse</button>
                                     </form>
                                 </td>
                                 <td
                                     class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500 ">
-                                    <form action="{{ route('services.executionservice', $service->id) }}" method="POST">
+                                    <form action="{{ route('services.executionservice', $service->id) }}"
+                                        method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-green-600"
-                                            {{ $service->validation_directeur_labo === "validate" && $service->validation_centre_appui === "validate" && $service->validation_enseignant === "validate" ? '' : 'disabled' }}
-                                            {{ $service->execution_service === "execute" ? 'disabled' : '' }}
-
-                                        >Execute</button>
+                                            {{ $service->validation_directeur_labo === 'validate' && $service->validation_centre_appui === 'validate' && $service->validation_enseignant === 'validate' ? '' : 'disabled' }}
+                                            {{ $service->execution_service === 'execute' ? 'disabled' : '' }}>Execute</button>
                                     </form>
-                                    <form action="{{ route('services.pendingservice', $service->id) }}" method="POST">
+                                    <form action="{{ route('services.pendingservice', $service->id) }}"
+                                        method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="text-red-600"
-                                            {{ $service->validation_directeur_labo === "validate" && $service->validation_centre_appui === "validate" && $service->validation_enseignant === "validate" ? '' : 'disabled' }}
-                                            {{ $service->execution_service === "pending" ? 'disabled' : '' }}
-
-
-                                        >Pending</button>
+                                            {{ $service->validation_directeur_labo === 'validate' && $service->validation_centre_appui === 'validate' && $service->validation_enseignant === 'validate' ? '' : 'disabled' }}
+                                            {{ $service->execution_service === 'pending' ? 'disabled' : '' }}>Pending</button>
                                     </form>
                                 </td>
                             @endif
@@ -272,32 +267,35 @@
                                     {{ $service->execution_service }}
                                 </td>
                             @endif
-                            <td class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
+                            <td
+                                class="h-12 px-6 text-sm transition duration-300 border-t border-l first:border-l-0 border-slate-200 stroke-slate-500 text-slate-500">
                                 @if (auth()->user()->hasRole('Centre d\'appui|Etudiant'))
                                     @if (auth()->user()->hasRole('Etudiant'))
-                                        @if ($service->execution_service === "execute")
-                                            <a href="{{ route('services.generatepdf', $service->id) }}" class="text-green-600">Download</a>
+                                        @if ($service->execution_service === 'execute')
+                                            <a href="{{ route('services.generatepdf', $service->id) }}"
+                                                class="text-green-600">Download</a>
                                         @else
-                                            <a href="{{ route('services.edit', $service->id) }}" class="text-indigo-600">Edit</a>
-                                            <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="inline-block">
+                                            <a href="{{ route('services.edit', $service->id) }}"
+                                                class="text-indigo-600">Edit</a>
+                                            <form action="{{ route('services.destroy', $service->id) }}"
+                                                method="POST" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600">Delete</button>
                                             </form>
                                         @endif
                                     @elseif (auth()->user()->hasRole('Centre d\'appui'))
-
-                                            @if ($service->frais_service && $service->execution_service !== "execute")
-                                                <button data-modal-target="frais-modal" data-modal-toggle="frais-modal"
-                                                        @click="showModal = true; serviceId = {{ $service->id }}"
-                                                        data-service-id="{{ $service->id }}"
-                                                        class="text-blue-600">Edit</button>
-                                            @endif
-
+                                        @if ($service->frais_service && $service->execution_service !== 'execute')
+                                            <button data-modal-target="frais-modal" data-modal-toggle="frais-modal"
+                                                @click="showModal = true; serviceId = {{ $service->id }}"
+                                                data-service-id="{{ $service->id }}"
+                                                class="text-blue-600">Edit</button>
+                                        @endif
                                     @endif
                                 @endif
-                                @if ($service->execution_service !== "execute")
-                                    <a href="{{ route('services.show', $service->id) }}" class="text-yellow-600">Show</a>
+                                @if ($service->execution_service !== 'execute')
+                                    <a href="{{ route('services.show', $service->id) }}"
+                                        class="text-yellow-600">Show</a>
                                 @endif
                             </td>
 
@@ -313,4 +311,3 @@
     </div>
 
 </div>
-

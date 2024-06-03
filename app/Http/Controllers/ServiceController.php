@@ -12,7 +12,8 @@ use App\Notifications\ServiceExecuted;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -42,9 +43,9 @@ class ServiceController extends Controller
             'titre' => 'required',
             'intitule_article' => 'nullable',
             'intitule_journal' => 'nullable',
-            'article' => 'nullable|file|mimes:doc,docx|max:6024',
-            'lettre_acceptation' => 'nullable|file|mimes:pdf|max:2024',
-            'devis_journal' => 'nullable|file|mimes:pdf|max:2024',
+            'article' => 'nullable|file|mimes:doc,docx,pdf',
+            'lettre_acceptation' => 'nullable|file|mimes:pdf',
+            'devis_journal' => 'nullable|file|mimes:pdf',
             'ISSN' => 'nullable',
             'base_donne_indexation' => 'nullable',
             'qualite_article' => 'nullable',
@@ -129,6 +130,7 @@ class ServiceController extends Controller
             'validation_directeur_labo' => 'nullable',
             'validation_enseignant' => 'nullable',
             'article' => 'nullable',
+
             'lettre_acceptation' => 'nullable',
             'devis_journal' => 'nullable',
         ]);
@@ -384,5 +386,40 @@ class ServiceController extends Controller
         $pdf = Pdf::loadView('services.pdf', $data);
 
         return $pdf->download('service.pdf');
+    }
+    public function export(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('Directeur de Laboratoire')) {
+            $services = Service::where('laboratory_id', $user->laboratory_id)->get();
+        } else {
+            $services = Service::all();
+        }
+
+        $data = $services->map(function ($service) use ($user) {
+            $row = [
+                'Nom de la benificeur' => $service->user->name,
+                'Type de service' => $service->type_service,
+                'Frais du service' => $service->frais_service,
+            ];
+
+            if ($user->hasRole('Directeur de laboratoire')) {
+                $row['Validation de Directeur de Laboratoire'] = $service->validation_directeur_labo;
+            }
+
+            if ($user->hasRole('Centre d\'appui')) {
+                $row['Validation de Centre d\'appui'] = $service->validation_centre_appui;
+                $row['Execution de Service'] = $service->execution_service;
+            }
+
+            if ($user->hasRole('Centre d\'analyse')) {
+                $row['Validation de Centre Analyse'] = $service->validation_centre_analyse;
+            }
+
+            return $row;
+        });
+
+        return (new FastExcel($data))->download('services.xlsx');
     }
 }

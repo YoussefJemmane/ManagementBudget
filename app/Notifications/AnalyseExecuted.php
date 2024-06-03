@@ -34,10 +34,13 @@ class AnalyseExecuted extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+
+
+
         return (new MailMessage)
-        ->line('Hurry up your analyse has been executed.')
-        ->action('View Analyses', url('/formulaireanalyse'))
-        ->line('Thank you for using our application!');
+        ->line('Bonne chance, votre analyse a été exécutée avec succès..')
+        ->action('Pour consulter vos analyses, cliquez sur le bouton ci-dessous.', url('/formulaireanalyse'))
+        ->line('Merci d\'utiliser notre application !');
     }
 
     /**
