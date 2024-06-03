@@ -391,7 +391,7 @@ class ServiceController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole('Directeur de Laboratoire')) {
+        if ($user->hasRole('Directeur de laboratoire')) {
             $services = Service::where('laboratory_id', $user->laboratory_id)->get();
         } else {
             $services = Service::all();
@@ -413,9 +413,6 @@ class ServiceController extends Controller
                 $row['Execution de Service'] = $service->execution_service;
             }
 
-            if ($user->hasRole('Centre d\'analyse')) {
-                $row['Validation de Centre Analyse'] = $service->validation_centre_analyse;
-            }
 
             return $row;
         });
