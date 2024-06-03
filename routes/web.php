@@ -81,6 +81,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/novalidationenseignant/{formulaireanalyse}', [FormulaireAnalyseController::class, 'novalidationenseignant'])->name('formulaireanalysenovalidationenseignant.update');
         Route::put('/pendinganalyse/{formulaireanalyse}', [FormulaireAnalyseController::class, 'pendinganalyse'])->name('formulaireanalysependingexecutionanalyse.update');
         Route::put('/executeanalyse/{formulaireanalyse}', [FormulaireAnalyseController::class, 'executeanalyse'])->name('formulaireanalyseexecutioncentreanalyse.update');
+        Route::get('/formulaireanalyse/export', [FormulaireAnalyseController::class, 'export'])->name('formulaireanalyse.export');
+
     });
 
 

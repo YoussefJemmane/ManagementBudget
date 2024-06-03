@@ -12,6 +12,8 @@ use App\Notifications\AnalyseExecuted;
 use App\Notifications\AnalyseValidated;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\AnalyseRefuser;
+use Illuminate\Support\Facades\Auth;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class FormulaireAnalyseController extends Controller
 {
@@ -473,6 +475,41 @@ class FormulaireAnalyseController extends Controller
         return response()->streamDownload(function() use($pdf){
             echo $pdf->stream();
         },'formulaireanalyse.pdf');
+    }
+
+    public function export(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('Directeur de laboratoire')) {
+            $formulaireanalyse = FormulaireAnalyse::where('laboratory_id', $user->laboratory_id)->get();
+        } else {
+            $formulaireanalyse = FormulaireAnalyse::all();
+        }
+
+        $data = $formulaireanalyse->map(function ($formulaireanalyse) use ($user) {
+            $row = [
+                'Nom de la benificeur' => $formulaireanalyse->user->name,
+                'Designantion' => $formulaireanalyse->designantion,
+                'Prix Unitaire' => $formulaireanalyse->prix_unitaire,
+                'Quantite' => $formulaireanalyse->quantite,
+                'Prix Total' => $formulaireanalyse->prix_total,
+            ];
+
+            if ($user->hasRole('Directeur de laboratoire')) {
+                $row['Validation de Directeur de Laboratoire'] = $formulaireanalyse->validation_directeur_labo;
+            }
+
+            if ($user->hasRole('Centre d\'analyse')) {
+                $row['Validation de Centre d\'analyse'] = $formulaireanalyse->validation_centre_analyse;
+                $row['Execution d\'analyse'] = $formulaireanalyse->execution_analyse;
+            }
+
+
+            return $row;
+        });
+
+        return (new FastExcel($data))->download('analyses.xlsx');
     }
 
 }

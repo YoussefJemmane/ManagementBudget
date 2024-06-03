@@ -13,6 +13,10 @@
                 class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">Add
                 Analyse</a>
         @endif
+        @if (!auth()->user()->hasRole('Etudiant|Pole de recherche|Enseignant'))
+        <a href="{{ route('formulaireanalyse.export') }}"
+        class="px-4 py-2 ml-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">Export Data</a>
+        @endif
     </div>
 
 
