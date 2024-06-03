@@ -24,8 +24,8 @@ class ServiceStored extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('A new service has been added.')
-                    ->action('View Service', url('/services'))
-                    ->line('Thank you for using our application!');
+                    ->line('Une nouvelle service a été ajoutée. ')
+                    ->action('Pour consulter votre service, cliquez sur le bouton ci-dessous. ', url('/services'))
+                    ->line('Merci d\'utiliser notre application !');
     }
 }

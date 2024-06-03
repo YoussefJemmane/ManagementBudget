@@ -133,6 +133,51 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
+            @if (auth()->user()->hasRole('Pole de recherche'))
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    {{ __('Utilisateurs') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('laboratory.index')" :active="request()->routeIs('laboratory.index')">
+                    {{ __('Laboratoires') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->hasRole('Entreprise'))
+                <x-responsive-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
+                    {{ __('Formations') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->hasRole('Centre d\'analyse'))
+                <x-responsive-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
+                    {{ __('Formations') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
+                    {{ __('Centre d\'Analyses') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->hasRole('Centre d\'appui'))
+                <x-responsive-nav-link :href="route('formulaireformation.index')" :active="request()->routeIs('formulaireformation.index')">
+                    {{ __('Formations') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
+                    {{ __('Centre d\'appui') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->hasRole('Directeur de laboratoire|Enseignant'))
+                <x-responsive-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
+                    {{ __('Centre d\'Analyses') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
+                    {{ __('Centre d\'appui') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->hasRole('Etudiant'))
+                <x-responsive-nav-link :href="route('formulaireanalyse.index')" :active="request()->routeIs('formulaireanalyse.index')">
+                    {{ __('Centre d\'Analyses') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
+                    {{ __('Centre d\'appui') }}
+                </x-responsive-nav-link>
+            @endif
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

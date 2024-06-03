@@ -115,7 +115,7 @@
                     @foreach ($roles as $role)
                         @if ($role->name == 'Etudiant')
 
-                                <p>Nom Complet : {{ $user->name }}</p>
+                                <p>{{ $user->name }}</p>
 
                         @endif
                     @endforeach

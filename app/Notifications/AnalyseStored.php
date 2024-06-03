@@ -35,9 +35,9 @@ class AnalyseStored extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('A new analyse has been added.')
-                    ->action('View Analyses', url('/formulaireanalyse'))
-                    ->line('Thank you for using our application!');
+                    ->line('Une nouvelle analyse a été ajoutée.')
+                    ->action('Pour consulter vos analyses, cliquez sur le bouton ci-dessous. ', url('/formulaireanalyse'))
+                    ->line('Merci d\'utiliser notre application !');
     }
 
     /**

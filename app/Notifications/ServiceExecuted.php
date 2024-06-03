@@ -35,9 +35,9 @@ class ServiceExecuted extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->line('Hurry up your service has been executed.')
-        ->action('View Services', url('/services'))
-        ->line('Thank you for using our application!');
+        ->line('Bonne chance, votre service a été exécuté avec succès.')
+        ->action('Pour consulter vos services, cliquez sur le bouton ci-dessous.', url('/services'))
+        ->line('Merci d\'utiliser notre application !');
     }
 
     /**

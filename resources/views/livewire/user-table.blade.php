@@ -1,9 +1,8 @@
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
-    {{-- add a button that add a user a modal will pop up and have the form --}}
     <div>
         <div class="flex justify-end gap-5 pb-2">
-            {{-- import export data and if import use a modal to pop up without changing the page that have the form and a file csv --}}
+            
             <form action="{{ route('users.export') }}" method="POST">
                 @csrf
                 <button

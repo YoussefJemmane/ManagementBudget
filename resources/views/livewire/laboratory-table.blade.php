@@ -1,16 +1,15 @@
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
-    {{-- add a button that add a laboratory --}}
     <div class="flex justify-end gap-5 pb-2">
 
-<form action="{{ route('labos.export') }}" method="POST">
-                @csrf
-                <button
-                    class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-green">Export
-                    Laboratories</button>
-            </form>
+        <form action="{{ route('labos.export') }}" method="POST">
+            @csrf
+            <button
+                class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-green">Export
+                Laboratories</button>
+        </form>
 
-            <button data-modal-target="import-modal" data-modal-toggle="import-modal"
+        <button data-modal-target="import-modal" data-modal-toggle="import-modal"
             class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-yellow-600 border border-transparent rounded-lg active:bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:shadow-outline-green">Import
             Laboratories</button>
 
@@ -20,7 +19,7 @@
             class="px-4 py-2 text-sm font-semibold leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">Add
             Laboratory</a>
     </div>
-    
+
     <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border border-collapse rounded sm:border-separate border-slate-200"

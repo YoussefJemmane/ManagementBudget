@@ -1,6 +1,5 @@
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
-    {{-- add a button that add a formation --}}
     <div class="flex justify-end pb-2">
         @if (auth()->user()->hasRole('Entreprise'))
             <a href="{{ route('formulaireformation.create') }}"

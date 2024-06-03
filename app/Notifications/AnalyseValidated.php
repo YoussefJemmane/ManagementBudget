@@ -35,9 +35,9 @@ class AnalyseValidated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->line('A new analyse has been updated.')
-        ->action('View Analyse', url('/formulaireanalyse'))
-        ->line('Thank you for using our application!');
+        ->line('Une nouvelle analyse a été mise à jour')
+        ->action('Pour consulter votre analyse, cliquez sur le bouton ci-dessous. ', url('/formulaireanalyse'))
+        ->line('Merci d\'utiliser notre application !');
     }
 
     /**
